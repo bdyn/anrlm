@@ -58,6 +58,9 @@ class Game(models.Model):
 	)
 	winner = models.CharField(max_length=8, choices=winner_choices, default='draw')
 	date = models.DateField(default=datetime.date.today())
+
+	def is_legal(self):
+		return (self.corp_player != self.runner_player) and (self.runner_player in self.season.league.members.all()) and ((self.corp_player in self.season.league.members.all()))
 	
 	def __str__(self):
 		return '%s ran against %s in season: %s' % (self.runner_player, self.corp_player, self.season) 
