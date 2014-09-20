@@ -60,7 +60,10 @@ class Game(models.Model):
 	date = models.DateField(default=datetime.date.today())
 
 	def is_legal(self):
-		return (self.corp_player != self.runner_player) and (self.runner_player in self.season.league.members.all()) and ((self.corp_player in self.season.league.members.all()))
+		test1 = self.corp_player != self.runner_player
+		test2 = self.runner_player in self.season.league.members.all()
+		test3 = self.corp_player in self.season.league.members.all()
+		return test1 and test2 and test3
 	
 	def __str__(self):
 		return '%s ran against %s in season: %s' % (self.runner_player, self.corp_player, self.season) 
@@ -69,6 +72,10 @@ class Game(models.Model):
 class Scorecard(models.Model):
 	player = models.ForeignKey(Player)
 	season = models.ForeignKey(Season)
+
+	def number_of_games_played(self):
+		l = [g for g in self.season.game_set.all() if (g.is_legal() and ((g.runner_player == self.player) or (g.corp_player == self.player)))]
+		return len(l)
 	
 	def __str__(self):
 		return '%s scorecard for %s' % (self.season, self.player)
