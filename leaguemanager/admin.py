@@ -1,35 +1,37 @@
 from django.contrib import admin
 from leaguemanager.models import Player, League, Membership, Game, Season, Scorecard
 
-# Register your models here.
 
 class MembershipInline(admin.StackedInline):
-	model = Membership
-	extra = 0
+    model = Membership
+    extra = 0
+
 
 class SeasonInline(admin.StackedInline):
-	model = Season
-	extra = 0
+    model = Season
+    extra = 0
+
 
 class LeagueAdmin(admin.ModelAdmin):
-	inlines = [MembershipInline, SeasonInline]
+    inlines = [MembershipInline, SeasonInline]
 
 
 class GameInline(admin.TabularInline):
-	model = Game
-	extra = 0
+    model = Game
+    extra = 0
+
 
 class ScorecardInline(admin.StackedInline):
-	model = Scorecard
-	extra = 0
+    model = Scorecard
+    extra = 0
+
 
 class SeasonAdmin(admin.ModelAdmin):
-	inlines = [GameInline, ScorecardInline] 
+    inlines = [GameInline, ScorecardInline]
+
 
 class PlayerAdmin(admin.ModelAdmin):
-	inlines = [ScorecardInline]
-
-
+    inlines = [ScorecardInline]
 
 
 admin.site.register(Player, PlayerAdmin)
