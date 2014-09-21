@@ -40,7 +40,7 @@ class Season(models.Model):
 	name = models.CharField(max_length=128)
 	league = models.ForeignKey(League)
 	begin_date = models.DateField(default=datetime.date.today())
-	end_date = models.DateField(default=datetime.date.today())
+	end_date = models.DateField(default=datetime.date.today()+datetime.timedelta(days=30))
 	# rules for the league
 
 	def __str__(self):
@@ -63,7 +63,9 @@ class Game(models.Model):
 		test1 = self.corp_player != self.runner_player
 		test2 = self.runner_player in self.season.league.members.all()
 		test3 = self.corp_player in self.season.league.members.all()
-		return test1 and test2 and test3
+		test4 = self.date <= self.season.end_date
+		test5 = self.date >= self.season.begin_date
+		return test1 and test2 and test3 and test4 and test5
 	
 	def __str__(self):
 		return '%s ran against %s in season: %s' % (self.runner_player, self.corp_player, self.season) 
@@ -73,10 +75,14 @@ class Scorecard(models.Model):
 	player = models.ForeignKey(Player)
 	season = models.ForeignKey(Season)
 
-	def number_of_games_played(self):
+	def games_played(self):
 		l = [g for g in self.season.game_set.all() if (g.is_legal() and ((g.runner_player == self.player) or (g.corp_player == self.player)))]
-		return len(l)
-	
+		return l
+
+	def games_won(self):
+		l = [g for g in self.games_played() if ((self.player == g.corp_player and g.winner == 'corp') or (self.player == g.runner_player and g.winner == 'runner'))]
+		return l
+
 	def __str__(self):
 		return '%s scorecard for %s' % (self.season, self.player)
 
