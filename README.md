@@ -7,22 +7,9 @@ Game][ffg].
 
 Getting Started
 ---------------
-Fork and clone the repostory, then make sure you have GNU Make installed
-(`which make`). To create a Python virtual environment and install all the
-project dependencies,
-
-```bash
-cd ~/projects/anrlm  # substitute the location of your clone here
-make bootstrap
-```
-
-Before using any of Django's built-in `manage.py` commands, you'll need to
-activate the virtual environment: `source .virtualenv/bin/activate`. A handy,
-cross-repository shell alias for this is
-
-```bash
-alias virt='REPO=`git rev-parse --show-toplevel`; source $REPO/.virtualenv/bin/activate'
-```
+Install the dependencies with `pip install -r requirements.txt`. If you'd like
+to have your Python syntax checked before each commit, install the githooks:
+`./githooks/update_githooks.sh`.
 
 
 Disclaimer & License

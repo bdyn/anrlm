@@ -82,7 +82,7 @@ class Game(models.Model):
 
         return True
 
-    def save(self, *args, **kwargs):  # pylint: disable=super-on-old-class
+    def save(self, *args, **kwargs):
         if not self._is_legal():
             raise ValueError("Can't save illegal game %s." % self)
         return super(Game, self).save(*args, **kwargs)
