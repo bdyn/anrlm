@@ -43,6 +43,7 @@ nosetests.xml
 # SQLite databases
 .db
 .sqlite3
+*.sqlite3
 
 # Virtual environment
 .virtualenv
