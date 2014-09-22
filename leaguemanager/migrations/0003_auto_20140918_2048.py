@@ -14,6 +14,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='game',
             name='winner',
-            field=models.CharField(default=b'draw', max_length=8, choices=[(b'draw', b'draw'), (b'corp', b'corp'), (b'runner', b'runner')]),
+            field=models.CharField(
+                default=b'draw',
+                max_length=8,
+                choices=[(b'draw', b'draw'), (b'corp', b'corp'), (b'runner', b'runner')]),
         ),
     ]

@@ -1,3 +1,8 @@
-from django.test import TestCase
+from django import test
 
-# Create your tests here.
+
+class DummyTests(test.TestCase):
+
+    def test_nothing(self):
+        # Just here as a demonstration.
+        self.assertEqual(1 + 1, 2)

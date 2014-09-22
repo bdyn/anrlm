@@ -1,0 +1,48 @@
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+__pycache__
+
+# Installer logs
+pip-log.txt
+
+# Test ouput
+.coverage
+.tox
+nosetests.xml
+
+# Translations
+*.mo
+
+# IDE detritus
+.mr.developer.cfg
+.project
+.pydevproject
+.idea
+
+# Mac OS metadata
+.DS*
+._*
+
+# SQLite databases
+.db
+.sqlite3
+
+# Virtual environment
+.virtualenv
