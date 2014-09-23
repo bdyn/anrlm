@@ -111,4 +111,4 @@ class Scorecard(models.Model):
         return games_played
 
     def games_won(self):
-        return [g.winning_player == self.player for g in self.games_played()]
+        return [g for g in self.games_played() if g.winning_player == self.player]
