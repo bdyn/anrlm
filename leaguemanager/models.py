@@ -5,7 +5,17 @@ import datetime
 
 class Player(models.Model):
     user = models.OneToOneField(User)
-    favorite_faction = models.CharField(max_length=128)
+    faction_choices = (
+        ('neutral', 'neutral'),
+        ('anarch', 'anarch'),
+        ('criminal', 'criminal'),
+        ('shaper', 'shaper'),
+        ('haas-bioroid', 'haas-bioroid'),
+        ('jinteki', 'jinteki'),
+        ('nbn', 'nbn'),
+        ('weyland', 'weyland'),
+    )
+    favorite_faction = models.CharField(max_length=13, choices=faction_choices, default='neutral')
 
     def __unicode__(self):
         return unicode(self.user)
