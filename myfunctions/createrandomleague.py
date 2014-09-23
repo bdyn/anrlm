@@ -16,7 +16,7 @@ number_of_games = 50
 for name in playerlist:
 	try:
 		u = User.objects.get(username=name)
-	except u.DoesNotExist:
+	except User.DoesNotExist:
 		u = User.objects.create_user(name, name + '@anrlm.com', name)
 
 # register users as players
@@ -24,14 +24,14 @@ for name in playerlist:
 	u = User.objects.get(username=name)
 	try:
 		p = Player.objects.get(user=u)
-	except p.DoesNotExist:
+	except Player.DoesNotExist:
 		p = Player(user=u)
 		p.save()
 
 # create league for players
 try:
 	l = League.objects.get(name=leaguename)
-except l.DoesNotExist:
+except League.DoesNotExist:
 	organizingplayer = User.objects.get(username=playerlist[0]).player
 	l = League(name=leaguename, organizer=organizingplayer)
 	l.save()
@@ -42,7 +42,7 @@ for name in playerlist:
 	p = User.objects.get(username=name).player
 	try:
 		m = Membership.objects.get(player=p, league=l)
-	except m.DoesNotExist:
+	except Membership.DoesNotExist:
 		m = Membership(player=p, league=l)
 		m.save()
 
@@ -50,7 +50,7 @@ for name in playerlist:
 l = League.objects.get(name=leaguename)
 try: 
 	s = Season.objects.get(name=seasonname, league=l)
-except s.DoesNotExist:
+except Season.DoesNotExist:
 	s = Season(name=seasonname, league=l)
 	s.save()
 
@@ -61,7 +61,7 @@ for name in playerlist:
 	p = User.objects.get(username=name).player
 	try:
 		sc = Scorecard.objects.get(player=p, season=s)
-	except sc.DoesNotExist:
+	except Scorecard.DoesNotExist:
 		sc = Scorecard(player=p, season=s)
 		sc.save()
 
