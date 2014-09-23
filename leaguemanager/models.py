@@ -15,7 +15,7 @@ class League(models.Model):
     name = models.CharField(max_length=128)
     members = models.ManyToManyField(Player, through='Membership')
     organizer = models.ForeignKey(Player, related_name='organizer', default=0)
-        # there is a mistake here... one player should be able to run multiple leagues.  Fix this.
+    
     def __unicode__(self):
         return self.name
 
