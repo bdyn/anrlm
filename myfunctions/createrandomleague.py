@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from leaguemanager.models import Player, League, Membership, Season, Game, Scorecard
+from leaguemanager.models import Player, League, Season, Scorecard, Game, FoodBonus 
 import random
 import datetime
 
@@ -9,6 +9,7 @@ playerlist = ['Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Omeg
 leaguename = 'RLeague'
 seasonname = 'RSeason'
 number_of_games = 50
+number_of_foodbonuses = 100
 
 
 
@@ -80,5 +81,25 @@ while len(s.game_set.all()) < number_of_games:
 	gamedate = s.begin_date + datetime.timedelta(days=random_number_of_days)
 	g = Game(season=s, corp_player=corpplayer, runner_player=runnerplayer, winner=gamewinner, date=gamedate)
 	g.save()
+
+# and random food bonuses
+l = League.objects.get(name=leaguename)
+s = Season.objects.get(name=seasonname, league=l)
+def all_food_bonus_objects():
+	temp = []
+	for sc in s.scorecard_set.all():
+		temp.extend(sc.food_bonus_dates())
+	return temp
+while len(all_food_bonus_objects()) < number_of_foodbonuses:
+	p = random.choice(playerlist)
+	p = User.objects.get(username=p).player
+	random_number_of_days = random.choice(range(30))
+	fooddate = s.begin_date + datetime.timedelta(days=random_number_of_days)
+	scorecard = Scorecard.objects.get(player=p, season=s)
+	f = FoodBonus(date=fooddate, scorecard=scorecard)
+	f.save()
+
+
+
 
 	

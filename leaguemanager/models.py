@@ -112,3 +112,27 @@ class Scorecard(models.Model):
 
     def games_won(self):
         return [g for g in self.games_played() if g.winning_player == self.player]
+
+    def food_bonus_dates(self):
+        return [foodbonus.date for foodbonus in self.foodbonus_set.all()]
+
+    def point_total(self):
+        total = 0
+        for g in self.games_played():
+            additional_points = 1
+            if g in self.games_won():
+                additional_points = additional_points + 2
+            if g.date in self.food_bonus_dates():
+                additional_points = 2*additional_points
+            total = total + additional_points
+        return total
+
+
+class FoodBonus(models.Model):
+    # At Raygun, we get 2x points if we buy food.
+    scorecard = models.ForeignKey(Scorecard)
+    date = models.DateField(default=datetime.date.today())
+
+    def __unicode__(self):
+        return 'On %s for %s' % (self.date, self.scorecard.player)
+

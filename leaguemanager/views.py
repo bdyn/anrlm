@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from leaguemanager.models import Player, League
+from leaguemanager.models import Player, League, Season, Scorecard
 
 def index(request):
 	player_list = Player.objects.all()
@@ -14,3 +14,4 @@ def player(request, player_id):
 
 def league(request, league_id):
 	return HttpResponse("You're looking at the league detail page for %s." % League.objects.get(pk=league_id))
+

@@ -1,0 +1,26 @@
+<!-- {% if player_list %}
+	Here are the current players:
+	<ul>
+		{% for player in player_list %}
+			<li> {{ player }}, whose favorite faction is: {{ player.favorite_faction }}.
+		{% endfor %}
+	</ul>
+{% else %}
+	<p>There are no players!</p>
+{% endif %}
+{% if league_list %}
+	Here are the current leagues:
+	<ul>
+		{% for league in league_list %}
+			<li> {{ league }}, whose organizer is: {{ league.organizer }}.
+		{% endfor %}
+	</ul>
+{% else %}
+	<p>There are no leagues!</p>
+{% endif %} -->
+
+<ul>
+	{% for pl in player_list %}
+		<li> {{ pl }}, with score {{ Scorecard.objects.get(player=pl, season=the_season).point_total() }}	
+	{% endfor %}
+</ul>
