@@ -24,7 +24,13 @@ def season2(request, season_id):
     season2 = Season.objects.get(id=season_id)
     player_list = season2.league.members.all()
 
-    context = { 'player_list' : player_list, 'season2' : season2 }
+    context = {
+        'player_list': player_list,
+        'season2' : season2,
+        # The .get_score_for_season method doesn't, and probably shouldn't,
+        # exist - substitute your own logic here.
+        'players_and_scores': {p.name: p.get_score_for_season(season2) for p in player_list},
+    }
 
     return render(request, 'leaguemanager/season2.html', context)
 

@@ -20,7 +20,7 @@
 {% endif %} -->
 
 <ul>
-	{% for x in player_list %}
-		<li> {{ x }}, with score {{ x }}	
+	{% for player_name, score in players_and_scores.items() %}
+  <li> {{ player_name }}, with score {{ score }}</li>
 	{% endfor %}
 </ul>
