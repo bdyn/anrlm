@@ -1,15 +1,15 @@
 from django.contrib.auth.models import User
-from leaguemanager.models import Player, League, Season, Scorecard, Game, FoodBonus 
+from leaguemanager.models import Player, League, Season, Scorecard, Game, FoodBonus, Membership
 import random
 import datetime
 
 
 
 playerlist = ['Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Omega']
-leaguename = 'RLeague'
-seasonname = 'RSeason'
-number_of_games = 50
-number_of_foodbonuses = 100
+leaguename = 'RLeague2'
+seasonname = 'RSeason2'
+number_of_games = 60
+number_of_foodbonuses = 200
 
 
 

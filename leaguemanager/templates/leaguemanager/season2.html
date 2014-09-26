@@ -20,7 +20,7 @@
 {% endif %} -->
 
 <ul>
-	{% for pl in player_list %}
-		<li> {{ pl }}, with score {{ Scorecard.objects.get(player=pl, season=the_season).point_total() }}	
+	{% for x in player_list %}
+		<li> {{ x }}, with score {{ x }}	
 	{% endfor %}
 </ul>
