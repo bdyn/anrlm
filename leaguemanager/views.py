@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 from django import template
 
-from leaguemanager.models import Player, League, Season, Scorecard
+from leaguemanager.models import Player, League, Season
 
 def index(request):
 	player_list = Player.objects.all()

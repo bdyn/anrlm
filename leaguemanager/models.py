@@ -1,10 +1,17 @@
 from django.db import models
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 import datetime
 
 
 class Player(models.Model):
-    user = models.OneToOneField(User)
+    # remove user from the player model
+    # not going to deal with user logins right now
+    # user = models.OneToOneField(User)
+    name = models.CharField(max_length=128, default='handle')
+    first_name = models.CharField(max_length=128, default='first')
+    last_name = models.CharField(max_length=128, default='last')
+    email_address = models.CharField(max_length=128, default='email')
+
     faction_choices = (
         ('neutral', 'neutral'),
         ('anarch', 'anarch'),
@@ -18,7 +25,41 @@ class Player(models.Model):
     favorite_faction = models.CharField(max_length=13, choices=faction_choices, default='neutral')
 
     def __unicode__(self):
-        return unicode(self.user)
+        return unicode(self.name)  
+
+    def games_played(self, season):
+        # FIXME: Faster with Django Q objects
+        # (https://docs.djangoproject.com/en/1.7/topics/db/queries/#complex-lookups-with-q-objects),
+        # but simpler with two queries.
+        games_played = list(season.game_set.filter(runner_player=self))
+        games_played.extend(season.game_set.filter(corp_player=self))
+        return games_played
+
+    def games_won(self, season):
+        return [g for g in self.games_played(season) if g.winning_player == self]
+
+    def games_won_on_date(self, season, date):
+        return [g for g in self.games_won(season) if g.date == date]
+
+    def dates_attended(self, season):
+        # output = [g.date for g in self.games_played(season)]
+        # output.delete_duplicates()
+        # return output
+        output = []
+        game_dates = [g.date for g in self.games_played(season)]
+        for date in game_dates:
+            if not date in output:
+                output.append(date)
+        return output
+
+    def score(self, season):
+        total = 0
+        total += len(self.games_played(season))
+        total += 5*len(self.dates_attended(season))
+        for date in self.dates_attended(season):
+            total += min(5, len(self.games_won_on_date(season, date)))
+        return total
+       
 
 
 class League(models.Model):
@@ -44,7 +85,6 @@ class Season(models.Model):
     league = models.ForeignKey(League)
     begin_date = models.DateField(default=datetime.date.today())
     end_date = models.DateField(default=datetime.date.today()+datetime.timedelta(days=30))
-    # rules for the league
 
     def __unicode__(self):
         return self.name
@@ -54,12 +94,14 @@ class Game(models.Model):
     season = models.ForeignKey(Season, default=0)
     corp_player = models.ForeignKey(Player, related_name='corp_player')
     runner_player = models.ForeignKey(Player, related_name='runner_player')
-    winner_choices = (
+    outcome_choices = (
         ('draw', 'draw'),
-        ('corp', 'corp'),
-        ('runner', 'runner')
+        ('corp agenda victory', 'corp agenda victory'),
+        ('runner agenda victory', 'runner agenda victory'),
+        ('flatline', 'flatline'),
+        ('mill', 'mill')
     )
-    winner = models.CharField(max_length=8, choices=winner_choices, default='draw')
+    outcome = models.CharField(max_length=22, choices=outcome_choices, default='draw')
     date = models.DateField(default=datetime.date.today())
 
     def __unicode__(self):
@@ -67,9 +109,9 @@ class Game(models.Model):
 
     @property
     def winning_player(self):
-        if self.winner == "corp":
+        if self.outcome == 'corp agenda victory' or self.outcome == 'flatline':
             return self.corp_player
-        elif self.winner == "runner":
+        elif self.outcome == 'runner agenda victory' or self.outcome == 'mill':
             return self.runner_player
         # Null for draws.
         return None
@@ -95,6 +137,12 @@ class Game(models.Model):
         return super(Game, self).save(*args, **kwargs)
 
 
+
+
+# removing the scorecard class
+# these methods should be functions of a player and a season
+# for now, I will move these methods to the player class
+'''
 class Scorecard(models.Model):
     player = models.ForeignKey(Player)
     season = models.ForeignKey(Season)
@@ -126,8 +174,10 @@ class Scorecard(models.Model):
                 additional_points = 2*additional_points
             total = total + additional_points
         return total
+'''
 
-
+# this food bonus will be merged with a new rules/points paradigm
+'''
 class FoodBonus(models.Model):
     # At Raygun, we get 2x points if we buy food.
     scorecard = models.ForeignKey(Scorecard)
@@ -135,4 +185,5 @@ class FoodBonus(models.Model):
 
     def __unicode__(self):
         return 'On %s for %s' % (self.date, self.scorecard.player)
+'''
 
