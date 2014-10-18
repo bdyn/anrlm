@@ -2,6 +2,17 @@
 <br>
 <br>
 
+{% if league_list %}
+	Here are the current leagues:
+	<ul>
+		{% for league in league_list %}
+			<li> <a href="{% url 'league' league.id %}">{{ league }}</a>, whose organizer is: {{ league.organizer }}.
+		{% endfor %}
+	</ul>
+{% else %}
+	<p>There are no leagues!</p>
+{% endif %}
+
 {% if player_list %}
 	Here are the current players:
 	<ul>
@@ -11,14 +22,4 @@
 	</ul>
 {% else %}
 	<p>There are no players!</p>
-{% endif %}
-{% if league_list %}
-	Here are the current leagues:
-	<ul>
-		{% for league in league_list %}
-			<li> {{ league }}, whose organizer is: {{ league.organizer }}.
-		{% endfor %}
-	</ul>
-{% else %}
-	<p>There are no leagues!</p>
 {% endif %}

@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 from django import template
 
-from leaguemanager.models import Player, League, Season
+from leaguemanager.models import Player, League, Season, Membership
 
 def index(request):
 	player_list = Player.objects.all()
@@ -15,7 +15,37 @@ def player(request, player_id):
 	return HttpResponse("You're looking at the player detail page for %s." % Player.objects.get(pk=player_id))
 
 def league(request, league_id):
-	return HttpResponse("You're looking at the league detail page for %s." % League.objects.get(pk=league_id))
+    other = 'GET'
+    league = League.objects.get(pk=league_id)
+
+    if request.method == 'POST':
+        other = 'POST'
+        pta = request.POST['player_to_add']
+        if pta == '0':
+            other = 'POST: error, you must pick a player'
+        else:
+            pta = Player.objects.get(name=pta)
+            try:
+                m = Membership.objects.get(player=pta, league=league)
+                other = 'POST: %s is already a member' % pta
+            except Membership.DoesNotExist:
+                m = Membership(player=pta, league=league)
+                m.save()
+                other = '%s is now a member.' % pta 
+
+    members = league.members.all()
+    seasons = league.season_set.all()
+    all_players = Player.objects.all()
+    
+    context = {
+        'league': league, 
+        'members': members, 
+        'seasons': seasons, 
+        'all_players': all_players, 
+        'other': other
+    }
+    return render(request, 'leaguemanager/league.html', context)
+    
 
 def season(request, season_id):
     return HttpResponse("You're looking at the season detail page for %s." % Season.objects.get(pk=season_id))
@@ -39,7 +69,18 @@ def add_player(request):
     player_list = Player.objects.all()
 
     context = {'player_list': player_list, 'other': other}
-    return render(request, 'leaguemanager/add_player.html', context)
+    return render(request, 'leaguemanager/add_player.html', context)    
+
+
+
+
+
+
+
+
+
+
+
 
 def season2(request, season_id):
     season2 = Season.objects.get(id=season_id)

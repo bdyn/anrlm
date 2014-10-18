@@ -1,0 +1,80 @@
+<a href="{% url 'index' %}">Back to the League Manager index</a><br><br>
+
+{{ other }}<br><br>
+
+{{ league.name }}<br>
+league detail page
+
+<hr>
+
+League organizer: {{ league.organizer }}
+
+<hr>
+
+{% if members %}
+	Current members:
+	<ul>
+		{% for player in members %}
+			<li> {{ player }}, whose favorite faction is: {{ player.favorite_faction }}. </li>
+		{% endfor %}
+	</ul>
+{% else %}
+	<p>There are no members!</p>
+{% endif %}
+
+<hr>
+
+{% if seasons %}
+	Recent Seasons:
+	<ul>
+		{% for season in seasons %}
+			<li> {{ season }}  &nbsp;&nbsp;&nbsp; >>> &nbsp;&nbsp;&nbsp; {{ season.begin_date }} until {{ season.end_date }} </li>
+		{% endfor %}
+	</ul>
+{% else %}
+	<p>There are no members!</p>
+{% endif %}
+
+<hr>
+
+<form method="post" action="{% url 'league' league.id %}">
+	{% csrf_token %}
+	Add new member:
+	<select id="player_dropdown" name="player_to_add">
+		<option value="0"> pick player to add </option>
+		{% for player in all_players %}
+			<option value="{{ player.name }}"> {{player.name}} </option>
+		{% endfor %}
+	</select> 
+	<input type="submit" value="Submit" />
+</form>
+<hr>
+
+Delete a membership? Look into how to distinguish between two different post requests.
+
+<!--
+{% if player_list %}
+	Here are the current players:
+	<ul>
+		{% for player in player_list %}
+			<li> {{ player }}, whose favorite faction is: {{ player.favorite_faction }}.
+		{% endfor %}
+	</ul>
+{% else %}
+	<p>There are no players!</p>
+{% endif %}
+-->
+
+<!--
+{% if league_list %}
+	Here are the current leagues:
+	<ul>
+		{% for league in league_list %}
+			<li> {{ league }}, whose organizer is: {{ league.organizer }}.
+		{% endfor %}
+	</ul>
+{% else %}
+	<p>There are no leagues!</p>
+{% endif %} -->
+
+
