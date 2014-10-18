@@ -75,9 +75,18 @@ def add_player(request):
 
 
 
+# testing area
 
+from django.forms import ModelForm
 
-
+def add_player2(request):
+    class PlayerForm(ModelForm):
+        class Meta:
+            model = Player
+            fields = ['name', 'first_name', 'last_name', 'email_address', 'favorite_faction']
+    form = PlayerForm()
+    context = {'form': form}
+    return render(request, 'leaguemanager/add_player2.html', context)
 
 
 
