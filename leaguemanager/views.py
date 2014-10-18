@@ -20,6 +20,27 @@ def league(request, league_id):
 def season(request, season_id):
     return HttpResponse("You're looking at the season detail page for %s." % Season.objects.get(pk=season_id))
 
+def add_player(request):
+    other = 'GET'
+    if request.method == 'POST':
+        name = request.POST['name']
+        try:
+            p = Player.objects.get(name=name)
+            other = "POST: Player %s already exists!" % name
+        except Player.DoesNotExist:
+            first = request.POST['first']
+            last = request.POST['last']
+            email = request.POST['email']
+            favorite = request.POST['favorite']
+            p = Player(name=name, first_name=first, last_name=last, email_address=email, favorite_faction=favorite)
+            p.save()
+            other = "POST: Player %s was saved." % name 
+    
+    player_list = Player.objects.all()
+
+    context = {'player_list': player_list, 'other': other}
+    return render(request, 'leaguemanager/add_player.html', context)
+
 def season2(request, season_id):
     season2 = Season.objects.get(id=season_id)
     player_list = season2.league.members.all()

@@ -10,7 +10,7 @@ number_of_games = 1000
 # FIXME: figure out how to implement food bonuses
 # number_of_foodbonuses = 200
 
-# register users as players (removed User, Player coupling)
+# create players (removed User, Player coupling)
 for name in playerlist:
 	try:
 		p = Player.objects.get(name=name)
