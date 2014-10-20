@@ -61,12 +61,14 @@ class Player(models.Model):
         # return output
 
         # distinct method on data base query
+        '''
         output = []
         game_dates = [g.date for g in self.games_played(season)]
         for date in game_dates:
             if not date in output:
                 output.append(date)
-        return output
+        '''
+        return {g.date for g in self.games_played(season)}
         # sets instead of lists
 
     def score(self, season):
