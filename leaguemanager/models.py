@@ -2,6 +2,20 @@ from django.db import models
 #from django.contrib.auth.models import User
 import datetime
 
+# use a seperate database table as the cache
+# there will be some setting file configuring
+# look for low level cache interface
+
+# to do's
+# sets over lists
+# index
+# caching with scorecard object
+
+# check data science meet ups
+# bootstrap
+
+# TODO: move these comments somewhere else
+
 
 class Player(models.Model):
     # remove user from the player model
@@ -45,12 +59,15 @@ class Player(models.Model):
         # output = [g.date for g in self.games_played(season)]
         # output.delete_duplicates()
         # return output
+
+        # distinct method on data base query
         output = []
         game_dates = [g.date for g in self.games_played(season)]
         for date in game_dates:
             if not date in output:
                 output.append(date)
         return output
+        # sets instead of lists
 
     def score(self, season):
         total = 0
@@ -59,6 +76,7 @@ class Player(models.Model):
         for date in self.dates_attended(season):
             total += min(5, len(self.games_won_on_date(season, date)))
         return total
+        # caching framework from django? look into it.
        
 
 
@@ -91,6 +109,9 @@ class Season(models.Model):
 
 
 class Game(models.Model):
+    # meta options for the model to index
+    # index on runner and corp (possibly with season)
+    # start with a keyword option
     season = models.ForeignKey(Season, default=0)
     corp_player = models.ForeignKey(Player, related_name='corp_player')
     runner_player = models.ForeignKey(Player, related_name='runner_player')
@@ -134,6 +155,7 @@ class Game(models.Model):
     def save(self, *args, **kwargs):
         if not self._is_legal():
             raise ValueError("Can't save illegal game %s." % self)
+        # this is where you would invalidate the cache.
         return super(Game, self).save(*args, **kwargs)
 
 

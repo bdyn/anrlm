@@ -43,7 +43,7 @@ League organizer: {{ league.organizer }}
 	<select id="player_dropdown" name="player_to_add">
 		<option value="0"> pick player to add </option>
 		{% for player in all_players %}
-			<option value="{{ player.name }}"> {{player.name}} </option>
+			<option value="{{ player.name }}"> {{ player.name }} </option>
 		{% endfor %}
 	</select> 
 	<input type="submit" value="Submit" />

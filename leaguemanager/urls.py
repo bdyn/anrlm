@@ -11,3 +11,6 @@ urlpatterns = patterns('',
     url(r'^add_player2/$', views.add_player2, name='add_player2'), #something I'm testing
     url(r'^season2/(?P<season_id>\d+)/$', views.season2, name='season2'), #something I'm testing
 )
+
+# look into Django's reverse function
+# tamplate tag that takes care of this... 
