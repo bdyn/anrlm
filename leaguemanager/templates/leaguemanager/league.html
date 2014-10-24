@@ -28,7 +28,7 @@ League organizer: {{ league.organizer }}
 	Recent Seasons:
 	<ul>
 		{% for season in seasons %}
-			<li> {{ season }}  &nbsp;&nbsp;&nbsp; >>> &nbsp;&nbsp;&nbsp; {{ season.begin_date }} until {{ season.end_date }} </li>
+			<li> <a href="{% url 'season' season.id %}"> {{ season }} </a>  &nbsp;&nbsp;&nbsp; >>> &nbsp;&nbsp;&nbsp; {{ season.begin_date }} until {{ season.end_date }} </li>
 		{% endfor %}
 	</ul>
 {% else %}

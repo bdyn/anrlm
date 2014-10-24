@@ -143,7 +143,7 @@ class Game(models.Model):
     corp_ID = models.CharField(max_length=128, choices=corp_ID_choices, default='none')
     runner_player = models.ForeignKey(Player, related_name='runner_player')
     runner_ID_choices = (
-        ("Edward Kim: Humanity's Hammer", "Edward Kim: Humanity's Hammer"),
+        ('Edward Kim: Humanitys Hammer', 'Edward Kim: Humanitys Hammer'),
         ('Noise: Hacker Extraordinaire', 'Noise: Hacker Extraordinaire'),
         ('Quetzal: Free Spirit', 'Quetzal: Free Spirit'),
         ('Reina Roja: Freedom Fighter', 'Reina Roja: Freedom Fighter'),
@@ -151,20 +151,21 @@ class Game(models.Model):
         ('Andromeda: Dispossessed Ristie', 'Andromeda: Dispossessed Ristie'),
         ('Gabriel Santiago: Consummate Professional', 'Gabriel Santiago: Consummate Professional'),
         ('Iain Stirling: Retired Spook', 'Iain Stirling: Retired Spook'),
-        ('Ken "Express" Tenma: Disappeared Clone'),
+        ('Ken Express Tenma: Disappeared Clone', 'Ken Express Tenma: Disappeared Clone'),
         ('Laramy Fisk: Savvy Investor', 'Laramy Fisk: Savvy Investor'),
         ('Leela Patel: Trained Pragmatist', 'Leela Patel: Trained Pragmatist'),
         ('Silhouette: Stealth Operative', 'Silhouette: Stealth Operative'),
         ('Chaos Theory: Wunderkind', 'Chaos Theory: Wunderkind'),
         ('Exile: Streethawk', 'Exile: Streethawk'),
-        ('Kate "Mac" McCaffrey: Digital Tinker', 'Kate "Mac" McCaffrey: Digital Tinker'),
+        ('Kate Mac McCaffrey: Digital Tinker', 'Kate Mac McCaffrey: Digital Tinker'),
         ('Nasir Meidan: Cyber Explorer', 'Nasir Meidan: Cyber Explorer'),
-        ('Rielle "Kit" Peddler: Transhuman', 'Rielle "Kit" Peddler: Transhuman'),
+        ('Rielle Kit Peddler: Transhuman', 'Rielle Kit Peddler: Transhuman'),
         ('The Collective: Williams, Wu, et al.', 'The Collective: Williams, Wu, et al.'),
         ('The Professor: Keeper of Knowledge', 'The Professor: Keeper of Knowledge'),
         ('The Masque: Cyber General', 'The Masque: Cyber General'),
-        ('none', 'none')
+        ('none', 'none'),
     )
+
     runner_ID = models.CharField(max_length=128, choices=runner_ID_choices, default='none')
 
     outcome_choices = (

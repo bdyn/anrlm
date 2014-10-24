@@ -1,0 +1,47 @@
+<a href="{% url 'index' %}">Back to the league manager index</a> 
+&nbsp;&nbsp;&nbsp;
+<a href="{% url 'league' league.id %}">Back to the {{ league.name }} detail</a>
+<hr>
+{{ season.name }} detail page
+<hr>
+<table border="1" cellspacing="1" cellpadding="2">
+	<tr>
+		<th>player</th><th>score</th>
+	</tr>	
+	{% for p,s in players_and_scores %}
+		<tr>
+  			<td>{{ p }}</td> <td>{{ s }}</td>
+  		</tr>
+	{% endfor %}
+</table>
+<hr>
+List of games:
+<table border="1" cellspacing="1" cellpadding="2">
+	<tr>
+		<th>runner</th>
+		<th>runner ID</th>
+		<th>corp</th>
+		<th>corp ID</th>
+		<th>outcome</th>
+		<th>date</th>
+	</tr>
+	{% for g in games %}
+		<tr>
+			<td>{{ g.runner_player }}</td>
+			<td>{{ g.runner_ID }}</td>
+			<td>{{ g.corp_player }}</td>
+			<td>{{ g.corp_ID }}</td>
+			<td>{{ g.outcome }}</td>
+			<td>{{ g.date }}</td>
+		</tr>
+	{% endfor %}
+</table>
+<hr>
+Add a score sheet:
+<form method="post" action="{% url 'season' season.id %}">
+	{% csrf_token %}
+	
+	<input type="submit" value="save games" />
+</form>
+
+
