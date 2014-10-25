@@ -1,0 +1,30 @@
+<a href="{% url 'index' %}">Back to the league manager index</a> 
+&nbsp;&nbsp;&nbsp;
+<a href="{% url 'league' league.id %}">Back to the {{ league.name }} detail</a>
+<hr>
+{{ comment }}
+<hr>
+Scoresheet<br>
+League: {{ league.name }}<br>
+Season: {{ season.name }}
+<hr>
+
+<form method="post" action="{% url 'add_scoresheet' season.id%}">
+	{% csrf_token %}
+	Player 1:
+	<select id="player1" name="player1">
+		{% for p in players %}
+			<option value="{{ p.id }}"> {{ p }} </option>
+		{% endfor %}
+	</select>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	Player 2:
+	<select id="player2" name="player2">
+		{% for p in players %}
+			<option value="{{ p.id }}"> {{ p }} </option>
+		{% endfor %}
+	</select>
+	<br>
+	<input type="submit" value="add score sheet" />
+</form>
+

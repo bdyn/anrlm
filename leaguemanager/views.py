@@ -84,6 +84,32 @@ def season(request, season_id):
     }
     return render(request, 'leaguemanager/season.html', context)
 
+def add_scoresheet(request, season_id):
+    comment = 'GET'
+    if request.method == 'POST':
+        comment = 'POST'
+
+    season = Season.objects.get(id=season_id)
+    league = season.league
+    players = league.members.all()
+    context = {
+        'season': season,
+        'league': league,
+        'comment': comment,
+        'players': players
+    }
+    return render(request, 'leaguemanager/add_scoresheet.html', context)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
