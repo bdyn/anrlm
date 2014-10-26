@@ -114,6 +114,7 @@ class Game(models.Model):
     # meta options for the model to index
     # index on runner and corp (possibly with season)
     # start with a keyword option
+<<<<<<< Updated upstream
     season = models.ForeignKey(Season, default=0)
     corp_player = models.ForeignKey(Player, related_name='corp_player')
     from ID_lists import *
@@ -123,6 +124,11 @@ class Game(models.Model):
     runner_ID_choices = tuple(zip(runner_ID_list(), runner_ID_list()))
     runner_ID = models.CharField(max_length=128, choices=runner_ID_choices, default='none')
 
+=======
+    season = models.ForeignKey(Season, default=0, db_index=True)
+    corp_player = models.ForeignKey(Player, related_name='corp_player', db_index=True)
+    runner_player = models.ForeignKey(Player, related_name='runner_player', db_index=True)
+>>>>>>> Stashed changes
     outcome_choices = (
         ('draw', 'draw'),
         ('corp agenda victory', 'corp agenda victory'),
