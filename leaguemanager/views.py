@@ -37,24 +37,8 @@ def player(request, player_id):
 	return HttpResponse("You're looking at the player detail page for %s." % Player.objects.get(pk=player_id))
 
 def league(request, league_id):
-    other = 'GET'
+    comment = 'GET'
     league = League.objects.get(pk=league_id)
-
-    if request.method == 'POST':
-        other = 'POST'
-        pta = request.POST['player_to_add']
-        if pta == '0':
-            other = 'POST: error, you must pick a player'
-        else:
-            pta = Player.objects.get(name=pta)
-            try:
-                m = Membership.objects.get(player=pta, league=league)
-                other = 'POST: %s is already a member' % pta
-            except Membership.DoesNotExist:
-                m = Membership(player=pta, league=league)
-                m.save()
-                other = '%s is now a member.' % pta 
-
     members = league.members.all()
     seasons = league.season_set.all()
     all_players = Player.objects.all()
@@ -64,9 +48,38 @@ def league(request, league_id):
         'members': members, 
         'seasons': seasons, 
         'all_players': all_players, 
-        'other': other
+        'comment': comment
     }
     return render(request, 'leaguemanager/league.html', context)
+
+def add_member(request, league_id):
+    comment = 'GET'
+    league = League.objects.get(pk=league_id)
+    if request.method == 'POST':
+        comment = 'POST'
+        pta = request.POST['player_to_add']
+        if pta == '0':
+            comment = 'POST: error, you must pick a player'
+        else:
+            pta = Player.objects.get(name=pta)
+            try:
+                m = Membership.objects.get(player=pta, league=league)
+                comment = 'POST: %s is already a member' % pta
+            except Membership.DoesNotExist:
+                m = Membership(player=pta, league=league)
+                m.save()
+                comment = 'POST: %s is now a member.' % pta 
+    members = league.members.all()
+    all_players = Player.objects.all()
+
+    context = {
+        'league': league,
+        'members': members,
+        'all_players': all_players,
+        'comment': comment
+    }
+    return render(request, 'leaguemanager/add_member.html', context)
+
     
 
 def season(request, season_id):
