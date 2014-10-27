@@ -15,33 +15,33 @@
 	{% endfor %}
 </table>
 <hr>
-<a href="{% url 'add_scoresheet' season.id %}">Add a score sheet</a>
-<hr>
-{% if games %}
-	List of games:
-	<table border="1" cellspacing="1" cellpadding="2">
+List of games:
+<table border="1" cellspacing="1" cellpadding="2">
+	<tr>
+		<th>runner</th>
+		<th>runner ID</th>
+		<th>corp</th>
+		<th>corp ID</th>
+		<th>outcome</th>
+		<th>date</th>
+	</tr>
+	{% for g in games %}
 		<tr>
-			<th>runner</th>
-			<th>runner ID</th>
-			<th>corp</th>
-			<th>corp ID</th>
-			<th>outcome</th>
-			<th>date</th>
+			<td>{{ g.runner_player }}</td>
+			<td>{{ g.runner_ID }}</td>
+			<td>{{ g.corp_player }}</td>
+			<td>{{ g.corp_ID }}</td>
+			<td>{{ g.outcome }}</td>
+			<td>{{ g.date }}</td>
 		</tr>
-		{% for g in games %}
-			<tr>
-				<td>{{ g.runner_player }}</td>
-				<td>{{ g.runner_ID }}</td>
-				<td>{{ g.corp_player }}</td>
-				<td>{{ g.corp_ID }}</td>
-				<td>{{ g.outcome }}</td>
-				<td>{{ g.date }}</td>
-			</tr>
-		{% endfor %}
-	</table>
-{% else %}
-	No games have been played!
-{% endif %}
+	{% endfor %}
+</table>
 <hr>
+Add a score sheet:
+<form method="post" action="{% url 'season' season.id %}">
+	{% csrf_token %}
+	
+	<input type="submit" value="save games" />
+</form>
 
 
