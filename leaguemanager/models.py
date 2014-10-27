@@ -123,6 +123,11 @@ class Game(models.Model):
     runner_ID_choices = tuple(zip(runner_ID_list(), runner_ID_list()))
     runner_ID = models.CharField(max_length=128, choices=runner_ID_choices, default='none')
 
+
+    season = models.ForeignKey(Season, default=0, db_index=True)
+    corp_player = models.ForeignKey(Player, related_name='corp_player', db_index=True)
+    runner_player = models.ForeignKey(Player, related_name='runner_player', db_index=True)
+
     outcome_choices = (
         ('draw', 'draw'),
         ('corp agenda victory', 'corp agenda victory'),
@@ -166,6 +171,13 @@ class Game(models.Model):
         # this is where you would invalidate the cache.
         return super(Game, self).save(*args, **kwargs)
 
+class FoodBonus(models.Model):
+    player = models.ForeignKey(Player)
+    season = models.ForeignKey(Season)
+    date = models.DateField(default=datetime.date.today())
+
+    def __unicode__(self):
+        return 'On %s for %s in %s' % (self.date, self.player, self.season)
 
 
 

@@ -7,7 +7,11 @@ import datetime
 playerlist = ['Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Omega']
 leaguename = 'Random League'
 seasonname = 'Random Season'
+<<<<<<< Updated upstream:leaguemanager/utilities/createrandomleague.py
 number_of_games = 250
+=======
+number_of_games = 200
+>>>>>>> Stashed changes:utilities/createrandomleague.py
 # FIXME: figure out how to implement food bonuses
 # number_of_foodbonuses = 200
 

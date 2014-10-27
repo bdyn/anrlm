@@ -1,6 +1,7 @@
-<a href="{% url 'index' %}">Back to the league manager index</a> 
-&nbsp;&nbsp;&nbsp;
-<a href="{% url 'league' league.id %}">Back to the {{ league.name }} detail</a>
+<a href="{% url 'index' %}">League manager</a>  >
+<a href="{% url 'league' league.id %}">{{ league.name }}</a>  >
+<a href="{% url 'season' season.id %}">{{ season.name }}</a>  > 
+Add a scoresheet
 <hr>
 {{ comment }}
 <hr>
@@ -11,19 +12,44 @@ Season: {{ season.name }}
 
 <form method="post" action="{% url 'add_scoresheet' season.id%}">
 	{% csrf_token %}
-	Player 1:
-	<select id="player1" name="player1">
-		{% for p in players %}
-			<option value="{{ p.id }}"> {{ p }} </option>
-		{% endfor %}
-	</select>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	Player 2:
-	<select id="player2" name="player2">
-		{% for p in players %}
-			<option value="{{ p.id }}"> {{ p }} </option>
-		{% endfor %}
-	</select>
+	<table border="1" cellpadding="20">
+		<tr>
+			<td>
+				Player 1:<br>
+				<select id="player1" name="player1">
+					{% for p in players %}
+						<option value="{{ p.id }}"> {{ p }} </option>
+					{% endfor %}
+				</select>
+			</td>
+			<td>
+				Player 2:<br>
+				<select id="player2" name="player2">
+					{% for p in players %}
+						<option value="{{ p.id }}"> {{ p }} </option>
+					{% endfor %}
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Food or beverage?<br>
+				<input id="player_1_food_true" type="radio" name="player_1_food" value="True" />
+				<label for="player_1_food_true">Yes</label>
+				&nbsp;&nbsp;
+				<input id="player_1_food_false" type="radio" name="player_1_food" value="False" checked="checked" />
+				<label for="player_1_food_false">No</label>
+			</td>
+			<td>
+				Food or beverage?<br>
+				<input id="player_2_food_true" type="radio" name="player_2_food" value="True" />
+				<label for="player_2_food_true">Yes</label>
+				&nbsp;&nbsp;
+				<input id="player_2_food_false" type="radio" name="player_2_food" value="False" checked="checked" />
+				<label for="player_2_food_false">No</label>
+			</td>
+		</tr>	
+	</table>
 	<br>
 	<input type="submit" value="add score sheet" />
 </form>
