@@ -90,11 +90,13 @@ def season(request, season_id):
     ps = {p.name: p.score(season) for p in players}
     ps = sorted(ps.items(), key=lambda t: t[1], reverse=True)
     games = season.game_set.all()
+    num_of_games = len(games)
     context = {
         'season': season, 
         'league': league,
         'players_and_scores': ps,
         'games': games,
+        'num_of_games': num_of_games,
     }
     return render(request, 'leaguemanager/season.html', context)
 

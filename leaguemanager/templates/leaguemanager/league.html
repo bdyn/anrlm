@@ -5,29 +5,36 @@
 
 <hr>
 {% if seasons %}
-	Recent Seasons:
-	<ul>
-		{% for season in seasons %}
-			<li> <a href="{% url 'season' season.id %}"> {{ season }} </a>  &nbsp;&nbsp;&nbsp; >>> &nbsp;&nbsp;&nbsp; {{ season.begin_date }} until {{ season.end_date }} </li>
-		{% endfor %}
-	</ul>
+	<b>Recent Seasons:</b>
+	<br>
+	{% for season in seasons %}
+		&nbsp;&nbsp;
+		<a href="{% url 'season' season.id %}"> {{ season }} </a>  
+		&nbsp;&nbsp;&nbsp; >>> &nbsp;&nbsp;&nbsp; 
+		{{ season.begin_date }} until {{ season.end_date }}
+	{% endfor %}
 {% else %}
 	<p>There are no members!</p>
 {% endif %}
+<br>
+<br>
+add new season
 
 <hr>
 League organizer: {{ league.organizer }}
 <br>
+<br>
 {% if members %}
-	Current members:
-	<ul>
-		{% for player in members %}
-			<li> {{ player }} </li>
-		{% endfor %}
-	</ul>
+	<b>Current members:</b>
+	<br>
+	{% for player in members %}
+		&nbsp;&nbsp; {{ player }}
+		<br>
+	{% endfor %}
 {% else %}
 	<p>There are no members!</p>
 {% endif %}
+<br>
 <a href="{% url 'add_member' league.id %}">add new member</a>
 
 <hr>
