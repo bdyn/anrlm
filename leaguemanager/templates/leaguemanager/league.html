@@ -1,5 +1,5 @@
 
-<h1> {{ league.name }} details </h1> 
+<h1> anrlm: {{ league.name }} </h1> 
 <a href="{% url 'index' %}">anrlm</a> 
 > {{ league.name }}
 
@@ -22,7 +22,7 @@ League organizer: {{ league.organizer }}
 	Current members:
 	<ul>
 		{% for player in members %}
-			<li> {{ player }}, whose favorite faction is: {{ player.favorite_faction }}. </li>
+			<li> {{ player }} </li>
 		{% endfor %}
 	</ul>
 {% else %}

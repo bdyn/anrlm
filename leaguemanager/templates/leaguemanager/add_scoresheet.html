@@ -1,4 +1,19 @@
-<h1>{{ season.name }}: add a scoresheet </h1> 
+<head>
+	<title>Add a score sheet for {{ season.name }}</title>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+	<link rel="stylesheet" href="/resources/demos/style.css">
+	<script>
+		$(function() {
+    	$( "#datepicker" ).datepicker();
+		});
+	</script>
+</head>
+
+<body>
+
+<h1>{{ season.name }}: add a score sheet </h1> 
 <a href="{% url 'index' %}">anrlm</a>  >
 <a href="{% url 'league' league.id %}">{{ league.name }}</a>  >
 <a href="{% url 'season' season.id %}">{{ season.name }}</a>  > 
@@ -11,6 +26,11 @@ add a scoresheet
 <form method="post" action="{% url 'add_scoresheet' season.id %}">
 	{% csrf_token %}
 	<table border="1" cellpadding="15">
+		<tr>
+			<td colspan="2">
+				Date: <input name="gamedate" type="date" id="datepicker" /> (mm/dd/yyyy)
+			</td>
+		</tr>
 		<tr style="background-color:#E0E0E0">
 			<td>
 				Player 1<br>
@@ -83,6 +103,10 @@ add a scoresheet
 		</tr>
 		<tr>
 			<td colspan="2">
+				Game 1 outcome:
+				<input id="g1notplayed" type="radio" name="game1outcome" value="notplayed" checked="checked"/>
+				<label for="g1notplayed">not played</label>
+				<br>
 				<input id="p1g1av" type="radio" name="game1outcome" value="player1agendavictory" />
 				<label for="p1g1av">Player 1 Agenda Victory</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<input id="g1draw" type="radio" name="game1outcome" value="draw" />
@@ -130,7 +154,11 @@ add a scoresheet
 			</td>
 		</tr>
 		<tr>
-			<td colspan="2">
+			<td colspan="2">				
+				Game 2 outcome:
+				<input id="g2notplayed" type="radio" name="game2outcome" value="notplayed" checked="checked"/>
+				<label for="g2notplayed">not played</label>
+				<br>
 				<input id="p1g2av" type="radio" name="game2outcome" value="player1agendavictory" />
 				<label for="p1g2av">Player 1 Agenda Victory</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<input id="g2draw" type="radio" name="game2outcome" value="draw" />
@@ -179,6 +207,10 @@ add a scoresheet
 		</tr>
 		<tr>
 			<td colspan="2">
+				Game 3 outcome: 
+				<input id="g3notplayed" type="radio" name="game3outcome" value="notplayed" checked="checked"/>
+				<label for="g3notplayed">not played</label>
+				<br>
 				<input id="p1g3av" type="radio" name="game3outcome" value="player1agendavictory" />
 				<label for="p1g3av">Player 1 Agenda Victory</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<input id="g3draw" type="radio" name="game3outcome" value="draw" />
@@ -227,6 +259,10 @@ add a scoresheet
 		</tr>
 		<tr>
 			<td colspan="2">
+				Game 4 outcome: 
+				<input id="g4notplayed" type="radio" name="game4outcome" value="notplayed" checked="checked"/>
+				<label for="g4notplayed">not played</label>
+				<br>
 				<input id="p1g4av" type="radio" name="game4outcome" value="player1agendavictory" />
 				<label for="p1g4av">Player 1 Agenda Victory</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<input id="g4draw" type="radio" name="game4outcome" value="draw" />
@@ -245,3 +281,5 @@ add a scoresheet
 </form>
 
 <hr>
+
+</body>

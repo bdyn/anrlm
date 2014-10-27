@@ -1,31 +1,36 @@
-<h1> android netrunner league manager </h1> 
+<h1> android: netrunner league manager </h1> 
 <a href="{% url 'index' %}">anrlm</a>
 
 <hr>
 {% if league_list %}
-	Current leagues:
-	<ul>
-		{% for league in league_list %}
-			<li> <a href="{% url 'league' league.id %}">{{ league }}</a>, whose organizer is: {{ league.organizer }}.
-		{% endfor %}
-	</ul>
+	<b>Current leagues:</b>
+	<br>
+	{% for league in league_list %}
+		&nbsp;&nbsp; <a href="{% url 'league' league.id %}">{{ league }}</a> 
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		>>>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		orgainizer: {{ league.organizer }}
+		<br>
+	{% endfor %}
 {% else %}
 	<p>There are no leagues!</p>
 {% endif %}
-Add a league  
+<br>
+add a league  
 
 <hr>
 {% if player_list %}
-	Current players:
-	<ul>
-		{% for player in player_list %}
-			<li> {{ player }}, whose favorite faction is: {{ player.favorite_faction }}.
-		{% endfor %}
-	</ul>
+	<b>Current players:</b>
+	<br>
+	{% for player in player_list %}
+		&nbsp;&nbsp;  {{ player }}<br>
+	{% endfor %}
 {% else %}
 	<p>There are no players!</p>
 {% endif %}
-<a href="{% url 'add_player' %}">Add a player</a>
+<br>
+<a href="{% url 'add_player' %}">add a player</a>
 
 <hr>
 <a href="https://github.com/bdyn/anrlm">github repo</a>

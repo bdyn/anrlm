@@ -38,12 +38,14 @@
 
 
 {% if player_list %}
-	Current players:
-	<ul>
-		{% for player in player_list %}
-			<li> {{ player }}, whose favorite faction is: {{ player.favorite_faction }}.
-		{% endfor %}
-	</ul>
+	<b>Current players:</b>
+	<br>
+	{% for player in player_list %}
+		&nbsp;&nbsp;{{ player }}
+		...
+		{{ player.favorite_faction }}
+		<br>
+	{% endfor %}
 {% else %}
 	<p>There are no players!</p>
 {% endif %}

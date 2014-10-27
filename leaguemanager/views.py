@@ -106,7 +106,7 @@ def add_scoresheet(request, season_id):
     players = league.members.all()
 
     if request.method == 'POST':
-        comment = 'POST'
+        comment = 'POST: %s' % request.POST
         
 
     corp_IDs = corp_ID_list()
