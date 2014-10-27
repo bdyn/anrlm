@@ -138,33 +138,3 @@ def add_scoresheet(request, season_id):
 
 
 
-
-
-
-# testing area
-
-from django.forms import ModelForm
-
-def add_player2(request):
-    class PlayerForm(ModelForm):
-        class Meta:
-            model = Player
-            fields = ['name', 'first_name', 'last_name', 'email_address', 'favorite_faction']
-    form = PlayerForm()
-    context = {'form': form}
-    return render(request, 'leaguemanager/add_player2.html', context)
-
-
-def season2(request, season_id):
-    season2 = Season.objects.get(id=season_id)
-    player_list = season2.league.members.all()
-    ps = {p.name: p.score(season2) for p in player_list}
-    context = {
-        # The .get_score_for_season method doesn't, and probably shouldn't,
-        # exist - substitute your own logic here.
-        'players_and_scores': ps
-    }
-
-    return render(request, 'leaguemanager/season2.html', context)
-
-

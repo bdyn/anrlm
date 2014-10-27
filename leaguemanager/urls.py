@@ -10,8 +10,6 @@ urlpatterns = patterns('',
     url(r'^add_player/$', views.add_player, name='add_player'),
     url(r'^add_member/(?P<league_id>\d+)/$', views.add_member, name='add_member'),
     url(r'^add_scoresheet/(?P<season_id>\d+)/$', views.add_scoresheet, name='add_scoresheet'),
-    url(r'^add_player2/$', views.add_player2, name='add_player2'), #something I'm testing
-    url(r'^season2/(?P<season_id>\d+)/$', views.season2, name='season2'), #something I'm testing
 )
 
 # look into Django's reverse function
