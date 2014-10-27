@@ -1,21 +1,19 @@
-<a href="{% url 'index' %}">League manager</a>  >
+<h1>{{ season.name }}: add a scoresheet </h1> 
+<a href="{% url 'index' %}">anrlm</a>  >
 <a href="{% url 'league' league.id %}">{{ league.name }}</a>  >
 <a href="{% url 'season' season.id %}">{{ season.name }}</a>  > 
-Add a scoresheet
+add a scoresheet
+
 <hr>
 {{ comment }}
-<hr>
-Scoresheet<br>
-League: {{ league.name }}<br>
-Season: {{ season.name }}
-<hr>
 
-<form method="post" action="{% url 'add_scoresheet' season.id%}">
+<hr>
+<form method="post" action="{% url 'add_scoresheet' season.id %}">
 	{% csrf_token %}
-	<table border="1" cellpadding="20">
-		<tr>
+	<table border="1" cellpadding="15">
+		<tr style="background-color:#E0E0E0">
 			<td>
-				Player 1:<br>
+				Player 1<br>
 				<select id="player1" name="player1">
 					{% for p in players %}
 						<option value="{{ p.id }}"> {{ p }} </option>
@@ -23,7 +21,7 @@ Season: {{ season.name }}
 				</select>
 			</td>
 			<td>
-				Player 2:<br>
+				Player 2<br>
 				<select id="player2" name="player2">
 					{% for p in players %}
 						<option value="{{ p.id }}"> {{ p }} </option>
@@ -48,9 +46,202 @@ Season: {{ season.name }}
 				<input id="player_2_food_false" type="radio" name="player_2_food" value="False" checked="checked" />
 				<label for="player_2_food_false">No</label>
 			</td>
-		</tr>	
+		</tr>
+		<tr style="background-color:#E0E0E0">
+			<td>
+				Game 1 I.D.<br>
+				<select id="player1game1id" name="player1game1id">
+					<option value="0"> none </option>
+					<optgroup label="Corp ID's">
+						{% for id in corp_IDs %}
+							<option value="{{ id }}"> {{ id }} </option>
+						{% endfor %}
+					</optgroup>
+					<optgroup label="Runner ID's">
+						{% for id in runner_IDs %}
+							<option value="{{ id }}"> {{ id }} </option>
+						{% endfor %}
+					</optgroup>
+				</select>
+			</td>
+			<td>
+				Game 1 I.D.<br>
+				<select id="player2game1id" name="player2game1id">
+					<option value="0"> none </option>
+					<optgroup label="Corp ID's">
+						{% for id in corp_IDs %}
+							<option value="{{ id }}"> {{ id }} </option>
+						{% endfor %}
+					</optgroup>
+					<optgroup label="Runner ID's">
+						{% for id in runner_IDs %}
+							<option value="{{ id }}"> {{ id }} </option>
+						{% endfor %}
+					</optgroup>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<input id="p1g1av" type="radio" name="game1outcome" value="player1agendavictory" />
+				<label for="p1g1av">Player 1 Agenda Victory</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="g1draw" type="radio" name="game1outcome" value="draw" />
+				<label for="g1draw">Draw</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="g1flatline" type="radio" name="game1outcome" value="flatline" />
+				<label for="g1flatline">Flatline</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="g1mill" type="radio" name="game1outcome" value="mill" />
+				<label for="g1mill">Corp Decked</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="p2g1av" type="radio" name="game1outcome" value="player2agendavictory" />
+				<label for="p2g1av">Player 2 Agenda Victory</label>
+			</td>
+		</tr>
+		<tr style="background-color:#E0E0E0">
+			<td>
+				Game 2 I.D.<br>
+				<select id="player1game2id" name="player1game2id">
+					<option value="0"> none </option>
+					<optgroup label="Corp ID's">
+						{% for id in corp_IDs %}
+							<option value="{{ id }}"> {{ id }} </option>
+						{% endfor %}
+					</optgroup>
+					<optgroup label="Runner ID's">
+						{% for id in runner_IDs %}
+							<option value="{{ id }}"> {{ id }} </option>
+						{% endfor %}
+					</optgroup>
+				</select>
+			</td>
+			<td>
+				Game 2 I.D.<br>
+				<select id="player2game2id" name="player2game2id">
+					<option value="0"> none </option>
+					<optgroup label="Corp ID's">
+						{% for id in corp_IDs %}
+							<option value="{{ id }}"> {{ id }} </option>
+						{% endfor %}
+					</optgroup>
+					<optgroup label="Runner ID's">
+						{% for id in runner_IDs %}
+							<option value="{{ id }}"> {{ id }} </option>
+						{% endfor %}
+					</optgroup>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<input id="p1g2av" type="radio" name="game2outcome" value="player1agendavictory" />
+				<label for="p1g2av">Player 1 Agenda Victory</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="g2draw" type="radio" name="game2outcome" value="draw" />
+				<label for="g2draw">Draw</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="g2flatline" type="radio" name="game2outcome" value="flatline" />
+				<label for="g2flatline">Flatline</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="g2mill" type="radio" name="game2outcome" value="mill" />
+				<label for="g2mill">Corp Decked</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="p2g2av" type="radio" name="game2outcome" value="player2agendavictory" />
+				<label for="p2g2av">Player 2 Agenda Victory</label>
+			</td>
+		</tr>
+		<tr style="background-color:#E0E0E0">
+			<td>
+				Game 3 I.D.<br>
+				<select id="player1game3id" name="player1game3id">
+					<option value="0"> none </option>
+					<optgroup label="Corp ID's">
+						{% for id in corp_IDs %}
+							<option value="{{ id }}"> {{ id }} </option>
+						{% endfor %}
+					</optgroup>
+					<optgroup label="Runner ID's">
+						{% for id in runner_IDs %}
+							<option value="{{ id }}"> {{ id }} </option>
+						{% endfor %}
+					</optgroup>
+				</select>
+			</td>
+			<td>
+				Game 3 I.D.<br>
+				<select id="player2game3id" name="player2game3id">
+					<option value="0"> none </option>
+					<optgroup label="Corp ID's">
+						{% for id in corp_IDs %}
+							<option value="{{ id }}"> {{ id }} </option>
+						{% endfor %}
+					</optgroup>
+					<optgroup label="Runner ID's">
+						{% for id in runner_IDs %}
+							<option value="{{ id }}"> {{ id }} </option>
+						{% endfor %}
+					</optgroup>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<input id="p1g3av" type="radio" name="game3outcome" value="player1agendavictory" />
+				<label for="p1g3av">Player 1 Agenda Victory</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="g3draw" type="radio" name="game3outcome" value="draw" />
+				<label for="g3draw">Draw</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="g3flatline" type="radio" name="game3outcome" value="flatline" />
+				<label for="g3flatline">Flatline</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="g3mill" type="radio" name="game3outcome" value="mill" />
+				<label for="g3mill">Corp Decked</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="p2g3av" type="radio" name="game3outcome" value="player2agendavictory" />
+				<label for="p2g3av">Player 2 Agenda Victory</label>
+			</td>
+		</tr>
+		<tr style="background-color:#E0E0E0">
+			<td>
+				Game 4 I.D.<br>
+				<select id="player1game4id" name="player1game4id">
+					<option value="0"> none </option>
+					<optgroup label="Corp ID's">
+						{% for id in corp_IDs %}
+							<option value="{{ id }}"> {{ id }} </option>
+						{% endfor %}
+					</optgroup>
+					<optgroup label="Runner ID's">
+						{% for id in runner_IDs %}
+							<option value="{{ id }}"> {{ id }} </option>
+						{% endfor %}
+					</optgroup>
+				</select>
+			</td>
+			<td>
+				Game 3 I.D.<br>
+				<select id="player2game4id" name="player2game4id">
+					<option value="0"> none </option>
+					<optgroup label="Corp ID's">
+						{% for id in corp_IDs %}
+							<option value="{{ id }}"> {{ id }} </option>
+						{% endfor %}
+					</optgroup>
+					<optgroup label="Runner ID's">
+						{% for id in runner_IDs %}
+							<option value="{{ id }}"> {{ id }} </option>
+						{% endfor %}
+					</optgroup>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<input id="p1g4av" type="radio" name="game4outcome" value="player1agendavictory" />
+				<label for="p1g4av">Player 1 Agenda Victory</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="g4draw" type="radio" name="game4outcome" value="draw" />
+				<label for="g4draw">Draw</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="g4flatline" type="radio" name="game4outcome" value="flatline" />
+				<label for="g4flatline">Flatline</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="g4mill" type="radio" name="game4outcome" value="mill" />
+				<label for="g4mill">Corp Decked</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="p2g4av" type="radio" name="game4outcome" value="player2agendavictory" />
+				<label for="p2g4av">Player 2 Agenda Victory</label>
+			</td>
+		</tr>
 	</table>
 	<br>
 	<input type="submit" value="add score sheet" />
 </form>
 
+<hr>

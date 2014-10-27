@@ -1,9 +1,9 @@
-<a href="{% url 'add_player' %}">Add a player</a>
-<br>
-<br>
+<h1> android netrunner league manager </h1> 
+<a href="{% url 'index' %}">anrlm</a>
 
+<hr>
 {% if league_list %}
-	Here are the current leagues:
+	Current leagues:
 	<ul>
 		{% for league in league_list %}
 			<li> <a href="{% url 'league' league.id %}">{{ league }}</a>, whose organizer is: {{ league.organizer }}.
@@ -12,9 +12,11 @@
 {% else %}
 	<p>There are no leagues!</p>
 {% endif %}
+Add a league  
 
+<hr>
 {% if player_list %}
-	Here are the current players:
+	Current players:
 	<ul>
 		{% for player in player_list %}
 			<li> {{ player }}, whose favorite faction is: {{ player.favorite_faction }}.
@@ -23,3 +25,7 @@
 {% else %}
 	<p>There are no players!</p>
 {% endif %}
+<a href="{% url 'add_player' %}">Add a player</a>
+
+<hr>
+<a href="https://github.com/bdyn/anrlm">github repo</a>

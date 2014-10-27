@@ -1,8 +1,11 @@
-<a href="{% url 'index' %}">Back to the league manager index</a> 
-&nbsp;&nbsp;&nbsp;
-<a href="{% url 'league' league.id %}">Back to the {{ league.name }} detail</a>
+<h1> {{ league.name }}: {{ season.name }} </h1> 
+<a href="{% url 'index' %}">anrlm</a>
+> <a href="{% url 'league' league.id %}"> {{ league.name }} </a>
+> {{ season.name }}
+
 <hr>
-{{ season.name }} detail page
+<a href="{% url 'add_scoresheet' season.id %}">add a score sheet</a>
+
 <hr>
 <table border="1" cellspacing="1" cellpadding="2">
 	<tr>
@@ -14,13 +17,12 @@
   		</tr>
 	{% endfor %}
 </table>
-<hr>
-<a href="{% url 'add_scoresheet' season.id %}">Add a score sheet</a>
-<hr>
+
+<br>
 {% if games %}
-	List of games:
 	<table border="1" cellspacing="1" cellpadding="2">
 		<tr>
+			<th>game</th>
 			<th>runner</th>
 			<th>runner ID</th>
 			<th>corp</th>
@@ -30,6 +32,7 @@
 		</tr>
 		{% for g in games %}
 			<tr>
+				<td>{{ g.id }}</tf>
 				<td>{{ g.runner_player }}</td>
 				<td>{{ g.runner_ID }}</td>
 				<td>{{ g.corp_player }}</td>
@@ -42,6 +45,5 @@
 {% else %}
 	No games have been played!
 {% endif %}
+
 <hr>
-
-

@@ -1,33 +1,9 @@
-<a href="{% url 'index' %}">Back to the League Manager index</a><br><br>
 
-{{ other }}<br><br>
-
-{{ league.name }}<br>
-league detail page
+<h1> {{ league.name }} details </h1> 
+<a href="{% url 'index' %}">anrlm</a> 
+> {{ league.name }}
 
 <hr>
-
-League organizer: {{ league.organizer }}
-
-<hr>
-
-<a href="{% url 'add_member' league.id %}">add new member</a>
-
-<hr>
-
-{% if members %}
-	Current members:
-	<ul>
-		{% for player in members %}
-			<li> {{ player }}, whose favorite faction is: {{ player.favorite_faction }}. </li>
-		{% endfor %}
-	</ul>
-{% else %}
-	<p>There are no members!</p>
-{% endif %}
-
-<hr>
-
 {% if seasons %}
 	Recent Seasons:
 	<ul>
@@ -40,3 +16,19 @@ League organizer: {{ league.organizer }}
 {% endif %}
 
 <hr>
+League organizer: {{ league.organizer }}
+<br>
+{% if members %}
+	Current members:
+	<ul>
+		{% for player in members %}
+			<li> {{ player }}, whose favorite faction is: {{ player.favorite_faction }}. </li>
+		{% endfor %}
+	</ul>
+{% else %}
+	<p>There are no members!</p>
+{% endif %}
+<a href="{% url 'add_member' league.id %}">add new member</a>
+
+<hr>
+{{ comment }}

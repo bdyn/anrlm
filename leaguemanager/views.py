@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django import template
 
 from leaguemanager.models import Player, League, Season, Membership
+from leaguemanager.ID_lists import *
 
 def index(request):
 	player_list = Player.objects.all()
@@ -99,17 +100,27 @@ def season(request, season_id):
 
 def add_scoresheet(request, season_id):
     comment = 'GET'
-    if request.method == 'POST':
-        comment = 'POST'
 
     season = Season.objects.get(id=season_id)
     league = season.league
     players = league.members.all()
+
+    if request.method == 'POST':
+        comment = 'POST'
+        
+
+    corp_IDs = corp_ID_list()
+    corp_IDs.pop(-1)
+    runner_IDs = runner_ID_list()
+    runner_IDs.pop(-1) 
+    
     context = {
         'season': season,
         'league': league,
         'comment': comment,
-        'players': players
+        'players': players,
+        'runner_IDs': runner_IDs,
+        'corp_IDs': corp_IDs
     }
     return render(request, 'leaguemanager/add_scoresheet.html', context)
 

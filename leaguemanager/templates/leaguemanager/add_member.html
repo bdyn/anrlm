@@ -1,25 +1,10 @@
-<a href="{% url 'index' %}">Back to the league manager index</a> 
-&nbsp;&nbsp;&nbsp;
-<a href="{% url 'league' league.id %}">Back to the {{ league.name }} detail</a>
+<h1> {{ league.name }}: add a member </h1> 
+<a href="{% url 'index' %}">anrlm</a>
+> <a href="{% url 'league' league.id %}"> {{ league.name }} </a>
+> add a member
+
 <hr>
-<br>
 {{ comment }}
-<hr>
-
-{{ league.name }}<br>
-add a player
-<hr>
-
-{% if members %}
-	Current members:
-	<ul>
-		{% for player in members %}
-			<li> {{ player }}, whose favorite faction is: {{ player.favorite_faction }}. </li>
-		{% endfor %}
-	</ul>
-{% else %}
-	<p>There are no members!</p>
-{% endif %}
 
 <hr>
 <form method="post" action="{% url 'add_member' league.id %}">
@@ -33,7 +18,21 @@ add a player
 	</select> 
 	<input type="submit" value="Submit" />
 </form>
+
 <hr>
+{% if members %}
+	Current members:
+	<ul>
+		{% for player in members %}
+			<li> {{ player }}, whose favorite faction is: {{ player.favorite_faction }}. </li>
+		{% endfor %}
+	</ul>
+{% else %}
+	<p>There are no members!</p>
+{% endif %}
+
+<hr>
+
 
 
 <!--
