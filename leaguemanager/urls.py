@@ -2,6 +2,10 @@ from django.conf.urls import patterns, url
 
 from leaguemanager import views
 
+
+
+
+
 urlpatterns = patterns('',
 	url(r'^$', views.index, name='index'),
 	url(r'^player/(?P<player_id>\d+)/$', views.player, name='player'),
@@ -11,6 +15,3 @@ urlpatterns = patterns('',
     url(r'^add_member/(?P<league_id>\d+)/$', views.add_member, name='add_member'),
     url(r'^add_scoresheet/(?P<season_id>\d+)/$', views.add_scoresheet, name='add_scoresheet'),
 )
-
-# look into Django's reverse function
-# tamplate tag that takes care of this... 

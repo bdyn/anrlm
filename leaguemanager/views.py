@@ -6,14 +6,27 @@ from django import template
 from leaguemanager.models import Player, League, Season, Membership
 from leaguemanager.ID_lists import *
 
+
+
+
+
 def index(request):
 	player_list = Player.objects.all()
 	league_list = League.objects.all()
-	context = {'player_list': player_list, 'league_list': league_list}
+
+	context = {
+        'player_list': player_list, 
+        'league_list': league_list,
+    }
 	return render(request, 'leaguemanager/index.html', context)
+
+
+
+
 
 def add_player(request):
     other = 'GET'
+
     if request.method == 'POST':
         name = request.POST['name']
         try:
@@ -26,16 +39,26 @@ def add_player(request):
             favorite = request.POST['favorite']
             p = Player(name=name, first_name=first, last_name=last, email_address=email, favorite_faction=favorite)
             p.save()
-            other = "POST: Player %s was saved." % name 
-    
+            other = "POST: Player %s was saved." % name
+
     player_list = Player.objects.all()
 
-    context = {'player_list': player_list, 'other': other}
+    context = {
+        'player_list': player_list, 
+        'other': other
+    }
     return render(request, 'leaguemanager/add_player.html', context)    
+
+
+
 
 
 def player(request, player_id):
 	return HttpResponse("You're looking at the player detail page for %s." % Player.objects.get(pk=player_id))
+
+
+
+
 
 def league(request, league_id):
     comment = 'GET'
@@ -53,9 +76,14 @@ def league(request, league_id):
     }
     return render(request, 'leaguemanager/league.html', context)
 
+
+
+
+
 def add_member(request, league_id):
     comment = 'GET'
     league = League.objects.get(pk=league_id)
+
     if request.method == 'POST':
         comment = 'POST'
         pta = request.POST['player_to_add']
@@ -69,7 +97,8 @@ def add_member(request, league_id):
             except Membership.DoesNotExist:
                 m = Membership(player=pta, league=league)
                 m.save()
-                comment = 'POST: %s is now a member.' % pta 
+                comment = 'POST: %s is now a member.' % pta
+
     members = league.members.all()
     all_players = Player.objects.all()
 
@@ -81,7 +110,9 @@ def add_member(request, league_id):
     }
     return render(request, 'leaguemanager/add_member.html', context)
 
-    
+
+
+
 
 def season(request, season_id):
     season = Season.objects.get(id=season_id)
@@ -91,6 +122,7 @@ def season(request, season_id):
     ps = sorted(ps.items(), key=lambda t: t[1], reverse=True)
     games = season.game_set.all()
     num_of_games = len(games)
+    
     context = {
         'season': season, 
         'league': league,
@@ -100,16 +132,18 @@ def season(request, season_id):
     }
     return render(request, 'leaguemanager/season.html', context)
 
+
+
+
+
 def add_scoresheet(request, season_id):
     comment = 'GET'
-
     season = Season.objects.get(id=season_id)
     league = season.league
     players = league.members.all()
 
     if request.method == 'POST':
         comment = 'POST: %s' % request.POST
-        
 
     corp_IDs = corp_ID_list()
     corp_IDs.pop(-1)
@@ -125,16 +159,3 @@ def add_scoresheet(request, season_id):
         'corp_IDs': corp_IDs
     }
     return render(request, 'leaguemanager/add_scoresheet.html', context)
-
-
-
-
-
-
-
-
-
-
-
-
-

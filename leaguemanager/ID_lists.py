@@ -1,5 +1,3 @@
-
-
 def corp_ID_list():
  	return ['Cerebral Imaging: Infinite Frontiers', 
 		'Chronos Protocol (Hass-Bioroid): Selective Mind-mapping', 
@@ -26,6 +24,9 @@ def corp_ID_list():
 	]
 
 
+
+
+
 def runner_ID_list():
 	return ['Edward Kim: Humanitys Hammer', 
 		'Noise: Hacker Extraordinaire',
@@ -49,5 +50,3 @@ def runner_ID_list():
 		'The Masque: Cyber General',
 		'none'
 	]
-
-
