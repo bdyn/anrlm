@@ -2,6 +2,8 @@ from django.db import models
 #from django.contrib.auth.models import User
 import datetime
 
+from ID_lists import *
+
 # use a seperate database table as the cache
 # there will be some setting file configuring
 # look for low level cache interface
@@ -109,7 +111,6 @@ class Game(models.Model):
     # start with a keyword option
     season = models.ForeignKey(Season, default=0)
     corp_player = models.ForeignKey(Player, related_name='corp_player')
-    from ID_lists import *
     corp_ID_choices = tuple(zip(corp_ID_list(), corp_ID_list()))
     corp_ID = models.CharField(max_length=128, choices=corp_ID_choices, default='none')
     runner_player = models.ForeignKey(Player, related_name='runner_player')
