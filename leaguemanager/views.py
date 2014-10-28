@@ -3,7 +3,9 @@ from django.shortcuts import render
 
 from django import template
 
-from leaguemanager.models import Player, League, Season, Membership
+from datetime import datetime
+
+from leaguemanager.models import Player, League, Season, Membership, FoodBonus, Game
 from leaguemanager.ID_lists import *
 
 
@@ -61,7 +63,6 @@ def player(request, player_id):
 
 
 def league(request, league_id):
-    comment = 'GET'
     league = League.objects.get(pk=league_id)
     members = league.members.all()
     seasons = league.season_set.all()
@@ -72,7 +73,6 @@ def league(request, league_id):
         'members': members, 
         'seasons': seasons, 
         'all_players': all_players, 
-        'comment': comment
     }
     return render(request, 'leaguemanager/league.html', context)
 
@@ -99,8 +99,8 @@ def add_member(request, league_id):
                 m.save()
                 comment = 'POST: %s is now a member.' % pta
 
-    members = league.members.all()
-    all_players = Player.objects.all()
+    members = sorted(league.members.all(), key=lambda x: x.name.lower())
+    all_players = sorted(Player.objects.all(), key=lambda x: x.name.lower())
 
     context = {
         'league': league,
@@ -122,13 +122,17 @@ def season(request, season_id):
     ps = sorted(ps.items(), key=lambda t: t[1], reverse=True)
     games = season.game_set.all()
     num_of_games = len(games)
-    
+    foodbonuses = season.foodbonus_set.all()
+    num_of_fbs = len(foodbonuses)
+
     context = {
         'season': season, 
         'league': league,
         'players_and_scores': ps,
         'games': games,
         'num_of_games': num_of_games,
+        'foodbonuses': foodbonuses,
+        'num_of_fbs': num_of_fbs,
     }
     return render(request, 'leaguemanager/season.html', context)
 
@@ -137,18 +141,227 @@ def season(request, season_id):
 
 
 def add_scoresheet(request, season_id):
-    comment = 'GET'
+    comment = ['GET']
     season = Season.objects.get(id=season_id)
     league = season.league
     players = league.members.all()
-
-    if request.method == 'POST':
-        comment = 'POST: %s' % request.POST
-
     corp_IDs = corp_ID_list()
     corp_IDs.pop(-1)
     runner_IDs = runner_ID_list()
     runner_IDs.pop(-1) 
+
+    if request.method == 'POST':
+        comment = ['POST', request.POST]
+        try:
+            date = request.POST['gamedate']
+            date = datetime.strptime(date, '%m/%d/%Y').date()
+        except ValueError:
+            comment.append('invalid date')
+            date = None
+        
+        if date:
+            id1 = request.POST['player1']
+            id2 = request.POST['player2']
+
+            if id1 == id2:
+                comment.append('You must choose different players.')
+            else:
+                player1 = Player.objects.get(id=request.POST['player1'])
+                player2 = Player.objects.get(id=request.POST['player2'])
+
+                # add food bonuses to the database  
+                if request.POST['player_1_food'] == 'True':
+                    try:
+                        fb = FoodBonus.objects.get(player=player1, season=season, date=date)
+                        comment.append('%s already exists!' % fb)
+                    except FoodBonus.DoesNotExist:
+                        fb = FoodBonus(player=player1, season=season, date=date)
+                        fb.save()
+                        comment.append('FoodBonus saved for %s on %s' % (player1, date))
+                if request.POST['player_2_food'] == 'True':
+                    try:
+                        fb = FoodBonus.objects.get(player=player2, season=season, date=date)
+                        comment.append('%s already exists!' % fb)
+                    except FoodBonus.DoesNotExist:
+                        fb = FoodBonus(player=player2, season=season, date=date)
+                        fb.save()
+                        comment.append('FoodBonus saved for %s on %s' % (player2, date))
+
+                # save game 1
+                outcome = request.POST['game1outcome']
+                player1id = request.POST['player1game1id']
+                player2id = request.POST['player2game1id']
+                v1 = (outcome == 'notplayed')
+                v2 = (player1id == '0')
+                v3 = (player2id == '0')
+                v4 = ((player1id in corp_IDs) and (player2id in corp_IDs))
+                v5 = ((player1id in runner_IDs) and (player2id in runner_IDs))
+                if v1 or v2 or v3 or v4 or v5:
+                    comment.append('Game 1 was not played or invalid')
+                else: 
+                    comment.append('Game 1 valid')
+                    if ((player1id in corp_IDs) and (player2id in runner_IDs)):
+                        corp_player = player1
+                        corp_id = player1id
+                        runner_player = player2
+                        runner_id = player2id
+                        if outcome == 'player1agendavictory':
+                            outcome = 'corp agenda victory'
+                        if outcome == 'player2agendavictory':
+                            outcome = 'runner agenda victory'
+                    else:
+                        corp_player = player2
+                        corp_id = player2id
+                        runner_player = player1
+                        runner_id = player1id
+                        if outcome == 'player1agendavictory':
+                            outcome = 'runner agenda victory'
+                        if outcome == 'player2agendavictory':
+                            outcome = 'corp agenda victory'
+
+                    g = Game(
+                        season=season,
+                        date=date,
+                        outcome=outcome,
+                        corp_player=corp_player,
+                        runner_player=runner_player,
+                        corp_ID=corp_id,
+                        runner_ID=runner_id
+                    )
+                    g.save()
+                    comment.append('Game 1 saved.')
+
+                # save game 2
+                outcome = request.POST['game2outcome']
+                player1id = request.POST['player1game2id']
+                player2id = request.POST['player2game2id']
+                v1 = (outcome == 'notplayed')
+                v2 = (player1id == '0')
+                v3 = (player2id == '0')
+                v4 = ((player1id in corp_IDs) and (player2id in corp_IDs))
+                v5 = ((player1id in runner_IDs) and (player2id in runner_IDs))
+                if v1 or v2 or v3 or v4 or v5:
+                    comment.append('Game 2 was not played or invalid')
+                else: 
+                    comment.append('Game 2 valid')
+                    if ((player1id in corp_IDs) and (player2id in runner_IDs)):
+                        corp_player = player1
+                        corp_id = player1id
+                        runner_player = player2
+                        runner_id = player2id
+                        if outcome == 'player1agendavictory':
+                            outcome = 'corp agenda victory'
+                        if outcome == 'player2agendavictory':
+                            outcome = 'runner agenda victory'
+                    else:
+                        corp_player = player2
+                        corp_id = player2id
+                        runner_player = player1
+                        runner_id = player1id
+                        if outcome == 'player1agendavictory':
+                            outcome = 'runner agenda victory'
+                        if outcome == 'player2agendavictory':
+                            outcome = 'corp agenda victory'
+
+                    g = Game(
+                        season=season,
+                        date=date,
+                        outcome=outcome,
+                        corp_player=corp_player,
+                        runner_player=runner_player,
+                        corp_ID=corp_id,
+                        runner_ID=runner_id
+                    )
+                    g.save()
+                    comment.append('Game 2 saved.')
+
+                # save game 3
+                outcome = request.POST['game3outcome']
+                player1id = request.POST['player1game3id']
+                player2id = request.POST['player2game3id']
+                v1 = (outcome == 'notplayed')
+                v2 = (player1id == '0')
+                v3 = (player2id == '0')
+                v4 = ((player1id in corp_IDs) and (player2id in corp_IDs))
+                v5 = ((player1id in runner_IDs) and (player2id in runner_IDs))
+                if v1 or v2 or v3 or v4 or v5:
+                    comment.append('Game 3 was not played or invalid')
+                else: 
+                    comment.append('Game 3 valid')
+                    if ((player1id in corp_IDs) and (player2id in runner_IDs)):
+                        corp_player = player1
+                        corp_id = player1id
+                        runner_player = player2
+                        runner_id = player2id
+                        if outcome == 'player1agendavictory':
+                            outcome = 'corp agenda victory'
+                        if outcome == 'player2agendavictory':
+                            outcome = 'runner agenda victory'
+                    else:
+                        corp_player = player2
+                        corp_id = player2id
+                        runner_player = player1
+                        runner_id = player1id
+                        if outcome == 'player1agendavictory':
+                            outcome = 'runner agenda victory'
+                        if outcome == 'player2agendavictory':
+                            outcome = 'corp agenda victory'
+
+                    g = Game(
+                        season=season,
+                        date=date,
+                        outcome=outcome,
+                        corp_player=corp_player,
+                        runner_player=runner_player,
+                        corp_ID=corp_id,
+                        runner_ID=runner_id
+                    )
+                    g.save()
+                    comment.append('Game 3 saved.')
+
+                # save game 4
+                outcome = request.POST['game4outcome']
+                player1id = request.POST['player1game4id']
+                player2id = request.POST['player2game4id']
+                v1 = (outcome == 'notplayed')
+                v2 = (player1id == '0')
+                v3 = (player2id == '0')
+                v4 = ((player1id in corp_IDs) and (player2id in corp_IDs))
+                v5 = ((player1id in runner_IDs) and (player2id in runner_IDs))
+                if v1 or v2 or v3 or v4 or v5:
+                    comment.append('Game 4 was not played or invalid')
+                else: 
+                    comment.append('Game 4 valid')
+                    if ((player1id in corp_IDs) and (player2id in runner_IDs)):
+                        corp_player = player1
+                        corp_id = player1id
+                        runner_player = player2
+                        runner_id = player2id
+                        if outcome == 'player1agendavictory':
+                            outcome = 'corp agenda victory'
+                        if outcome == 'player2agendavictory':
+                            outcome = 'runner agenda victory'
+                    else:
+                        corp_player = player2
+                        corp_id = player2id
+                        runner_player = player1
+                        runner_id = player1id
+                        if outcome == 'player1agendavictory':
+                            outcome = 'runner agenda victory'
+                        if outcome == 'player2agendavictory':
+                            outcome = 'corp agenda victory'
+
+                    g = Game(
+                        season=season,
+                        date=date,
+                        outcome=outcome,
+                        corp_player=corp_player,
+                        runner_player=runner_player,
+                        corp_ID=corp_id,
+                        runner_ID=runner_id
+                    )
+                    g.save()
+                    comment.append('Game 4 saved.')
     
     context = {
         'season': season,

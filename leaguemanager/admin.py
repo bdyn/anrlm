@@ -1,5 +1,5 @@
 from django.contrib import admin
-from leaguemanager.models import Player, League, Membership, Game, Season
+from leaguemanager.models import Player, League, Membership, Game, Season, FoodBonus
 
 
 class MembershipInline(admin.StackedInline):
@@ -21,11 +21,6 @@ class GameInline(admin.TabularInline):
     extra = 0
 
 
-'''
-class ScorecardInline(admin.StackedInline):
-    model = Scorecard
-    extra = 0
-'''
 
 class SeasonAdmin(admin.ModelAdmin):
     inlines = [GameInline]
@@ -37,6 +32,5 @@ admin.site.register(Player)
 admin.site.register(League, LeagueAdmin)
 admin.site.register(Season, SeasonAdmin)
 admin.site.register(Game)
-# admin.site.register(Scorecard)
 admin.site.register(Membership)
-# admin.site.register(FoodBonus)
+admin.site.register(FoodBonus)

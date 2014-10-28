@@ -52,3 +52,35 @@
 {% endif %}
 
 <hr>
+{% if foodbonuses %}
+	<table border="1" cellspacing="1" cellpadding="2">
+		<tr>
+			<th colspan="2">
+				Number of food bonuses: {{ num_of_fbs }}
+			</th>
+		</tr>
+		<tr>
+			<th>
+				date
+			</th>
+			<th>
+				player
+			</th>
+		</tr>
+		
+		{% for fb in foodbonuses %}
+			<tr>
+				<td>
+					{{ fb.date }}
+				</td>
+				<td>
+					{{ fb.player }}
+				</td>
+			</tr>
+		{% endfor%}
+	</table>
+{% else %}
+	There are no food bonuses.
+{% endif %}
+
+<hr>

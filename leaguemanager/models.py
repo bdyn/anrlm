@@ -62,6 +62,7 @@ class Player(models.Model):
         total += 5*len(self.dates_attended(season))
         for date in self.dates_attended(season):
             total += min(5, len(self.games_won_on_date(season, date)))
+        total += 5*len(self.foodbonus_set.filter(season=season))
         return total
 
 
@@ -116,12 +117,6 @@ class Game(models.Model):
     runner_player = models.ForeignKey(Player, related_name='runner_player')
     runner_ID_choices = tuple(zip(runner_ID_list(), runner_ID_list()))
     runner_ID = models.CharField(max_length=128, choices=runner_ID_choices, default='none')
-
-
-    season = models.ForeignKey(Season, default=0, db_index=True)
-    corp_player = models.ForeignKey(Player, related_name='corp_player', db_index=True)
-    runner_player = models.ForeignKey(Player, related_name='runner_player', db_index=True)
-
     outcome_choices = (
         ('draw', 'draw'),
         ('corp agenda victory', 'corp agenda victory'),

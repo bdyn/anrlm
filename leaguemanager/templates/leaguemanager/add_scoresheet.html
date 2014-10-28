@@ -19,7 +19,9 @@
 add a scoresheet
 
 <hr>
-{{ comment }}
+{% for c in comment %}
+	-- {{ c }} <br>
+{% endfor %}
 
 <hr>
 <form method="post" action="{% url 'add_scoresheet' season.id %}">
