@@ -42,7 +42,7 @@ class Player(models.Model):
     def games_played(self, season):
         # FIXME: Faster with Django Q objects
         # (https://docs.djangoproject.com/en/1.7/topics/db/queries/#complex-lookups-with-q-objects),
-        # but simpler with two queries.
+        # but simpler with two queries.Season
         games_played = list(season.game_set.filter(runner_player=self))
         games_played.extend(season.game_set.filter(corp_player=self))
         return games_played
@@ -110,11 +110,11 @@ class Game(models.Model):
     # meta options for the model to index
     # index on runner and corp (possibly with season)
     # start with a keyword option
-    season = models.ForeignKey(Season, default=0)
-    corp_player = models.ForeignKey(Player, related_name='corp_player')
+    season = models.ForeignKey(Season, default=0, db_index=True)
+    corp_player = models.ForeignKey(Player, related_name='corp_player', db_index=True)
     corp_ID_choices = tuple(zip(corp_ID_list(), corp_ID_list()))
     corp_ID = models.CharField(max_length=128, choices=corp_ID_choices, default='none')
-    runner_player = models.ForeignKey(Player, related_name='runner_player')
+    runner_player = models.ForeignKey(Player, related_name='runner_player', db_index=True)
     runner_ID_choices = tuple(zip(runner_ID_list(), runner_ID_list()))
     runner_ID = models.CharField(max_length=128, choices=runner_ID_choices, default='none')
     outcome_choices = (
@@ -125,10 +125,18 @@ class Game(models.Model):
         ('mill', 'mill')
     )
     outcome = models.CharField(max_length=22, choices=outcome_choices, default='draw')
-    date = models.DateField(default=datetime.date.today())
+    date = models.DateField(default=datetime.date.today(), db_index=True)
 
     def __unicode__(self):
         return '%s ran against %s in season: %s' % (self.runner_player, self.corp_player, self.season)
+    
+    
+    class Meta:
+        index_together = [
+            ['corp_player', 'season'],
+            ['runner_player', 'season']
+        ]
+    
 
     @property
     def winning_player(self):
