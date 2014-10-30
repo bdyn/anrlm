@@ -1,3 +1,12 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+	anrlm: {{ league.name }}: add a member
+{% endblock %}
+
+{% block content %}
+
 <h1> {{ league.name }}: add a member </h1> 
 <a href="{% url 'index' %}">anrlm</a>
 > <a href="{% url 'league' league.id %}"> {{ league.name }} </a>
@@ -33,31 +42,6 @@
 
 <hr>
 
-
-
-<!--
-{% if player_list %}
-	Here are the current players:
-	<ul>
-		{% for player in player_list %}
-			<li> {{ player }}, whose favorite faction is: {{ player.favorite_faction }}.
-		{% endfor %}
-	</ul>
-{% else %}
-	<p>There are no players!</p>
-{% endif %}
--->
-
-<!--
-{% if league_list %}
-	Here are the current leagues:
-	<ul>
-		{% for league in league_list %}
-			<li> {{ league }}, whose organizer is: {{ league.organizer }}.
-		{% endfor %}
-	</ul>
-{% else %}
-	<p>There are no leagues!</p>
-{% endif %} -->
+{% endblock %}
 
 

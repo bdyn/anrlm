@@ -1,5 +1,14 @@
-<head>
-	<title>Add a score sheet for {{ season.name }}</title>
+{% extends "base.html" %}
+
+
+{% block title %}
+	anrlm: {{ season.name }}: add a score sheet
+{% endblock %}
+
+
+
+
+{% block head %}
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 	<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
@@ -8,15 +17,18 @@
     	$( "#datepicker" ).datepicker();
 		});
 	</script>
-</head>
+{% endblock %}
 
-<body>
+
+
+
+{% block content %}
 
 <h1>{{ season.name }}: add a score sheet </h1> 
 <a href="{% url 'index' %}">anrlm</a>  >
 <a href="{% url 'league' league.id %}">{{ league.name }}</a>  >
 <a href="{% url 'season' season.id %}">{{ season.name }}</a>  > 
-add a scoresheet
+add a score sheet
 
 <hr>
 {% for c in comment %}
@@ -283,4 +295,4 @@ add a scoresheet
 
 <hr>
 
-</body>
+{% endblock %}

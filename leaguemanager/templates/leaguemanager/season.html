@@ -1,3 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}
+	anrlm: {{ league.name }}: {{ season.name }}
+{% endblock %}
+
+
+{% block content %}
+
 <h1> {{ league.name }}: {{ season.name }} </h1> 
 <a href="{% url 'index' %}">anrlm</a>
 > <a href="{% url 'league' league.id %}"> {{ league.name }} </a>
@@ -84,3 +93,5 @@
 {% endif %}
 
 <hr>
+
+{% endblock %}

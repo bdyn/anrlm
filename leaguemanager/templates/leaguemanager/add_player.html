@@ -1,3 +1,11 @@
+
+{% extends "base.html" %}
+{% block title %}
+	anrlm: add a player
+{% endblock %}
+{% block content %}
+
+
 <h1> android netrunner league manager: add a player </h1> 
 <a href="{% url 'index' %}">anrlm</a> 
 > add a player
@@ -49,3 +57,6 @@
 {% else %}
 	<p>There are no players!</p>
 {% endif %}
+<hr>
+
+{% endblock %}

@@ -1,4 +1,13 @@
 
+{% extends "base.html" %}
+
+{% block title %}
+	anrlm: {{ league.name }}
+{% endblock %}
+
+
+{% block content %}
+
 <h1> anrlm: {{ league.name }} </h1> 
 <a href="{% url 'index' %}">anrlm</a> 
 > {{ league.name }}
@@ -38,3 +47,5 @@ League organizer: {{ league.organizer }}
 <a href="{% url 'add_member' league.id %}">add new member</a>
 
 <hr>
+
+{% endblock %}
