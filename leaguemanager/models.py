@@ -4,20 +4,6 @@ import datetime
 
 from ID_lists import *
 
-# use a seperate database table as the cache
-# there will be some setting file configuring
-# look for low level cache interface
-
-# to do's
-# sets over lists
-# index
-# caching with scorecard object
-
-# check data science meet ups
-# bootstrap
-
-# TODO: move these comments somewhere else
-
 
 class Player(models.Model):
     name = models.CharField(max_length=128, default='handle')

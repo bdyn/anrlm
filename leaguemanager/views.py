@@ -372,3 +372,43 @@ def add_scoresheet(request, season_id):
         'corp_IDs': corp_IDs
     }
     return render(request, 'leaguemanager/add_scoresheet.html', context)
+
+
+
+
+
+def edit_game(request, game_id):
+    comment = 'GET'
+    game = Game.objects.get(id=game_id)
+    season = game.season
+    league = season.league
+    members = league.members.all()
+    corp_IDs = corp_ID_list()
+    corp_IDs.pop(-1)
+    runner_IDs = runner_ID_list()
+    runner_IDs.pop(-1)
+    formatteddate = game.date.strftime('%m/%d/%Y')
+    outcomelist = [
+        'draw',
+        'corp agenda victory',
+        'runner agenda victory',
+        'flatline',
+        'mill'
+    ]
+
+    if request.method == 'POST':
+        comment = request.POST
+
+
+    context = {
+        'game': game,
+        'season': season,
+        'league': league,
+        'members': members,
+        'corp_IDs': corp_IDs,
+        'runner_IDs': runner_IDs,
+        'formatteddate': formatteddate,
+        'outcomelist': outcomelist,
+        'comment': comment,
+    }
+    return render(request, 'leaguemanager/edit_game.html', context)

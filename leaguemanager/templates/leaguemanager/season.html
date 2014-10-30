@@ -46,7 +46,11 @@
 		</tr>
 		{% for g in games %}
 			<tr>
-				<td>{{ g.id }}</tf>
+				<td>
+					<a href="{% url 'edit_game' g.id %}">
+						{{ g.id }}
+					</a>
+				</td>
 				<td>{{ g.runner_player }}</td>
 				<td>{{ g.runner_ID }}</td>
 				<td>{{ g.corp_player }}</td>
