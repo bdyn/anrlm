@@ -33,7 +33,11 @@ edit game
 <hr>
 Game date: {{ game.date }}<br><br>
 League: {{ league }}<br>
-Season: {{ season }}<br><br>
+Season: {{ season }}
+&nbsp;&nbsp;&nbsp;&nbsp;
+>>>
+&nbsp;&nbsp;&nbsp;&nbsp;
+{{ season.begin_date }} until {{ season.end_date }}<br><br>
 Corp&nbsp;&nbsp;&nbsp;&nbsp; >>> &nbsp;&nbsp;&nbsp;&nbsp;
 {{ game.corp_player }}&nbsp;&nbsp;&nbsp;&nbsp; >>> &nbsp;&nbsp;&nbsp;&nbsp;
 {{ game.corp_ID }}<br>
@@ -69,7 +73,7 @@ Outcome: {{ game.outcome }}
 			{% endfor %}
 		</optgroup>
 	</select>
-	<br><br>
+	<br>
 	Runner player:
 	<select id='runnerplayer' name='runnerplayer'>
 		<optgroup label="Current player">
@@ -103,7 +107,7 @@ Outcome: {{ game.outcome }}
 			{% endfor %}
 		</optgroup>
 	</select>
-	<br><br>
+	<br>
 	<input type="submit" value="update game" />
 </form>
 

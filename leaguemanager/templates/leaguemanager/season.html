@@ -13,6 +13,9 @@
 > {{ season.name }}
 
 <hr>
+Runs from {{ season.begin_date }} until {{ season.end_date }}.
+
+<hr>
 <a href="{% url 'add_scoresheet' season.id %}">add a score sheet</a>
 
 <hr>

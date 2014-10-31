@@ -378,7 +378,6 @@ def add_scoresheet(request, season_id):
 
 
 def edit_game(request, game_id):
-    comment = 'GET'
     game = Game.objects.get(id=game_id)
     season = game.season
     league = season.league
@@ -387,7 +386,7 @@ def edit_game(request, game_id):
     corp_IDs.pop(-1)
     runner_IDs = runner_ID_list()
     runner_IDs.pop(-1)
-    formatteddate = game.date.strftime('%m/%d/%Y')
+    
     outcomelist = [
         'draw',
         'corp agenda victory',
@@ -395,11 +394,29 @@ def edit_game(request, game_id):
         'flatline',
         'mill'
     ]
+    comment = 'GET'
+
 
     if request.method == 'POST':
-        comment = request.POST
+        try:
+            newdate = request.POST['gamedate']
+            newdate = datetime.strptime(newdate, '%m/%d/%Y').date()
+        except ValueError:
+            newdate = None
+        
+        if newdate:
+            if not request.POST['corpplayer'] == request.POST['runnerplayer']:
+                game.date = newdate
+                game.corp_player = Player.objects.get(id=request.POST['corpplayer'])
+                game.corp_ID = request.POST['corpid']
+                game.runner_player = Player.objects.get(id=request.POST['runnerplayer'])
+                game.runner_ID = request.POST['runnerid']
+                game.outcome = request.POST['gameoutcome']
+                game.save()
+                comment = 'POST: game updated'
 
 
+    formatteddate = game.date.strftime('%m/%d/%Y')
     context = {
         'game': game,
         'season': season,
