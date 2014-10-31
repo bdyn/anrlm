@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+	anrlm: player {{ player }}
+{% endblock %}
+
+
+{% block content %}
+
+<h1> anrlm: player {{ player }} </h1> 
+<a href="{% url 'index' %}">anrlm</a>
+> {{ player }}
+
+<hr>
+hi player!
+<hr>
+
+{% if leagues %}
+	Leagues:<br>
+	{% for league in leagues %}
+		&nbsp;&nbsp; {{ league }}<br>
+	{% endfor %}
+{% else %}
+	Player is not in any leagues.
+{% endif %}
+
+
+{% endblock %}

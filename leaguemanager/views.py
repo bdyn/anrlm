@@ -56,7 +56,15 @@ def add_player(request):
 
 
 def player(request, player_id):
-	return HttpResponse("You're looking at the player detail page for %s." % Player.objects.get(pk=player_id))
+    player = Player.objects.get(id=player_id)
+    leagues = player.league_set.all()
+
+    context = {
+        'player': player,
+        'leagues': leagues,
+    }
+
+    return render(request, 'leaguemanager/player.html', context)
 
 
 

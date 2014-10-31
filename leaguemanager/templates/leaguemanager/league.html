@@ -37,7 +37,7 @@ League organizer: {{ league.organizer }}
 	<b>Current members:</b>
 	<br>
 	{% for player in members %}
-		&nbsp;&nbsp; {{ player }}
+		&nbsp;&nbsp; <a href="{% url 'player' player.id %}">{{ player }}</a>
 		<br>
 	{% endfor %}
 {% else %}

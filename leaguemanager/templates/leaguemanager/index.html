@@ -33,7 +33,7 @@ add a league
 	<b>Current players:</b>
 	<br>
 	{% for player in player_list %}
-		&nbsp;&nbsp;  {{ player }}<br>
+		&nbsp;&nbsp;  <a href="{% url 'player' player.id %}">{{ player }}</a><br>
 	{% endfor %}
 {% else %}
 	<p>There are no players!</p>
