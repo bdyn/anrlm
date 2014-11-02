@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+	anrlm: game {{ game_id }}: deleted
+{% endblock %}
+
+
+{% block content %}
+
+<h1>game {{ game_id }}: deleted </h1> 
+<a href="{% url 'index' %}">anrlm</a>  >
+<a href="{% url 'league' league.id %}">{{ league.name }}</a>  >
+<a href="{% url 'season' season.id %}">{{ season.name }}</a>  > 
+game {{ game_id }}: deleted
+
+<hr>
+Return to <a href="{% url 'season' season.id %}">{{ season.name }}</a>.
+
+<hr>
+
+{% endblock %}

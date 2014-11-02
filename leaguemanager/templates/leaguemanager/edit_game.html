@@ -109,13 +109,14 @@ Outcome: {{ game.outcome }}
 	</select>
 	<br>
 	<input type="hidden" name="action" value="update">
+	<hr>
 	<input type="submit" value="update game" />
 </form>
-
+<hr>
 <form method="post" action="{% url 'edit_game' game.id %}">
 	{% csrf_token %}
 	<input type="hidden" name="action" value="delete">
-	<input type="submit" value="delete game" />
+	If deleted, the game must be re-entered via a score sheet. Be careful.  <input type="submit" value="delete game" />
 </form>
 
 <hr>

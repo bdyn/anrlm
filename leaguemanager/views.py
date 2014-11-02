@@ -425,7 +425,14 @@ def edit_game(request, game_id):
                     game.save()
         else:
             game.delete()
-            return HttpResponse('Game deleted!') ## create a game deleted view.
+            
+            context = {
+                'game_id': game_id,
+                'season': season,
+                'league': league,
+                'comment': comment
+            }
+            return render(request, 'leaguemanager/game_deleted.html', context)
 
 
     formatteddate = game.date.strftime('%m/%d/%Y')
