@@ -96,6 +96,8 @@ class Season(models.Model):
         parts = set([])
         for game in self.game_set.all():
             parts.update(game.players)
+        for fb in FoodBonus.objects.filter(season=self):
+            parts.update([fb.player])
         return list(parts)
 
 

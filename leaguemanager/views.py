@@ -406,22 +406,26 @@ def edit_game(request, game_id):
 
 
     if request.method == 'POST':
-        try:
-            newdate = request.POST['gamedate']
-            newdate = datetime.strptime(newdate, '%m/%d/%Y').date()
-        except ValueError:
-            newdate = None
+        comment = request.POST
+        if request.POST['action'] == 'update':
+            try:
+                newdate = request.POST['gamedate']
+                newdate = datetime.strptime(newdate, '%m/%d/%Y').date()
+            except ValueError:
+                newdate = None
         
-        if newdate:
-            if not request.POST['corpplayer'] == request.POST['runnerplayer']:
-                game.date = newdate
-                game.corp_player = Player.objects.get(id=request.POST['corpplayer'])
-                game.corp_ID = request.POST['corpid']
-                game.runner_player = Player.objects.get(id=request.POST['runnerplayer'])
-                game.runner_ID = request.POST['runnerid']
-                game.outcome = request.POST['gameoutcome']
-                game.save()
-                comment = 'POST: game updated'
+            if newdate:
+                if not request.POST['corpplayer'] == request.POST['runnerplayer']:
+                    game.date = newdate
+                    game.corp_player = Player.objects.get(id=request.POST['corpplayer'])
+                    game.corp_ID = request.POST['corpid']
+                    game.runner_player = Player.objects.get(id=request.POST['runnerplayer'])
+                    game.runner_ID = request.POST['runnerid']
+                    game.outcome = request.POST['gameoutcome']
+                    game.save()
+        else:
+            game.delete()
+            return HttpResponse('Game deleted!') ## create a game deleted view.
 
 
     formatteddate = game.date.strftime('%m/%d/%Y')
@@ -442,14 +446,18 @@ def edit_game(request, game_id):
 
 
 ## testing something!
+## at this point seasontest is better than season
+
 
 
 def seasontest(request, season_id):
     season = Season.objects.get(id=season_id)
     league = season.league
     games = season.game_set.all()
+    num_of_games = len(games)
     parts = season.participants
     foodbonuses = season.foodbonus_set.all()
+    num_of_fbs = len(foodbonuses)
 
     scores = {}
     attendence_dates = {}
@@ -471,11 +479,15 @@ def seasontest(request, season_id):
         if game.winning_player:
             scores[game.winning_player] += 1
         
+
+    for fb in foodbonuses:
+        attendence_dates[fb.player].add(fb.date)
+
     for player in parts:
         scores[player] += 5*len(attendence_dates[player])
         scores[player] += 5*len(player.foodbonus_set.filter(season=season))
 
-    # scores = sorted(scores.items(), key=lambda t: t[1], reverse=True)
+    scores = sorted(scores.items(), key=lambda t: t[1], reverse=True)
 
     context = {
         'season': season,
@@ -483,6 +495,8 @@ def seasontest(request, season_id):
         'scores': scores,
         'attendence_dates': attendence_dates,
         'games': games,
-        'gametest': gametest
+        'num_of_games': num_of_games,
+        'foodbonuses': foodbonuses,
+        'num_of_fbs': num_of_fbs,
     }
     return render(request, 'leaguemanager/seasontest.html', context)

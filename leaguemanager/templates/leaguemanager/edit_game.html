@@ -108,7 +108,14 @@ Outcome: {{ game.outcome }}
 		</optgroup>
 	</select>
 	<br>
+	<input type="hidden" name="action" value="update">
 	<input type="submit" value="update game" />
+</form>
+
+<form method="post" action="{% url 'edit_game' game.id %}">
+	{% csrf_token %}
+	<input type="hidden" name="action" value="delete">
+	<input type="submit" value="delete game" />
 </form>
 
 <hr>
