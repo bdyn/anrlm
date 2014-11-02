@@ -31,6 +31,9 @@ class Player(models.Model):
         # but simpler with two queries.Season
         games_played = list(season.game_set.filter(runner_player=self))
         games_played.extend(season.game_set.filter(corp_player=self))
+        # not sure which is best
+        #games_played = list(Game.objects.filter(runner_player=self, season=season))
+        #games_played.extend(Game.objects.filter(corp_player=self, season=season))
         return games_played
 
     def games_won(self, season):
@@ -88,6 +91,14 @@ class Season(models.Model):
     def __unicode__(self):
         return self.name
 
+    @property    
+    def participants(self):
+        parts = set([])
+        for game in self.game_set.all():
+            parts.update(game.players)
+        return list(parts)
+
+
 
 
 
@@ -120,7 +131,9 @@ class Game(models.Model):
     class Meta:
         index_together = [
             ['corp_player', 'season'],
-            ['runner_player', 'season']
+            ['runner_player', 'season'],
+            ['season', 'runner_player'],
+            ['season', 'corp_player'],
         ]
     
 
@@ -130,8 +143,11 @@ class Game(models.Model):
             return self.corp_player
         elif self.outcome == 'runner agenda victory' or self.outcome == 'mill':
             return self.runner_player
-        # Null for draws.
         return None
+
+    @property
+    def players(self):
+        return [self.corp_player, self.runner_player]
 
     def _is_legal(self):
         # If possible, fail before making expensive database queries.
@@ -165,3 +181,6 @@ class FoodBonus(models.Model):
 
     def __unicode__(self):
         return 'On %s for %s in %s' % (self.date, self.player, self.season)
+
+    class Meta:
+        ordering = ['date', 'player']

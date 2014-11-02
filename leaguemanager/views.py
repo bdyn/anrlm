@@ -125,7 +125,7 @@ def add_member(request, league_id):
 def season(request, season_id):
     season = Season.objects.get(id=season_id)
     league = season.league
-    players = league.members.all()
+    players = season.participants
     ps = {p.name: p.score(season) for p in players}
     ps = sorted(ps.items(), key=lambda t: t[1], reverse=True)
     games = season.game_set.all()
@@ -437,3 +437,52 @@ def edit_game(request, game_id):
         'comment': comment,
     }
     return render(request, 'leaguemanager/edit_game.html', context)
+
+
+
+
+## testing something!
+
+
+def seasontest(request, season_id):
+    season = Season.objects.get(id=season_id)
+    league = season.league
+    games = season.game_set.all()
+    parts = season.participants
+    foodbonuses = season.foodbonus_set.all()
+
+    scores = {}
+    attendence_dates = {}
+
+    gametest = {}
+
+    for player in parts:
+        scores[player] = 0
+        attendence_dates[player] = set([])
+
+    for game in games:
+        c = game.corp_player
+        r = game.runner_player
+        d = game.date
+        scores[c] += 1
+        scores[r] += 1
+        attendence_dates[c].add(d)
+        attendence_dates[r].add(d)
+        if game.winning_player:
+            scores[game.winning_player] += 1
+        
+    for player in parts:
+        scores[player] += 5*len(attendence_dates[player])
+        scores[player] += 5*len(player.foodbonus_set.filter(season=season))
+
+    # scores = sorted(scores.items(), key=lambda t: t[1], reverse=True)
+
+    context = {
+        'season': season,
+        'league': league,
+        'scores': scores,
+        'attendence_dates': attendence_dates,
+        'games': games,
+        'gametest': gametest
+    }
+    return render(request, 'leaguemanager/seasontest.html', context)

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-	anrlm: {{ league.name }}: {{ season.name }}
+	seasontest: {{ league.name }}: {{ season.name }}
 {% endblock %}
 
 
@@ -15,27 +15,38 @@
 <hr>
 Runs from {{ season.begin_date }} until {{ season.end_date }}.
 
-<hr>
-<a href="{% url 'add_scoresheet' season.id %}">add a score sheet</a>
 
+<hr>
+{{ scores }}
+
+<hr>
+{{ attendence_dates }}
+
+<hr>
+{{ gametest }}
+
+{% endblock %}
+
+<!--
 <hr>
 <table border="1" cellspacing="1" cellpadding="2">
 	<tr>
 		<th>player</th><th>score</th>
 	</tr>	
-	{% for p,s in players_and_scores %}
+	{% for p,s in scores %}
 		<tr>
   			<td>{{ p }}</td> <td>{{ s }}</td>
   		</tr>
 	{% endfor %}
 </table>
 
+
 <hr>
 {% if games %}
 	<table border="1" cellspacing="1" cellpadding="2">
 		<tr>
 			<th colspan="7">
-				Number of games: {{ num_of_games}}
+				Number of games: ###
 			</th>
 		</tr>
 		<tr>
@@ -66,6 +77,7 @@ Runs from {{ season.begin_date }} until {{ season.end_date }}.
 {% else %}
 	No games have been played!
 {% endif %}
+
 
 <hr>
 {% if foodbonuses %}
@@ -106,5 +118,4 @@ Runs from {{ season.begin_date }} until {{ season.end_date }}.
 {% endif %}
 
 <hr>
-
-{% endblock %}
+-->
