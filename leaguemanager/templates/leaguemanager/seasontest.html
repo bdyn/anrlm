@@ -28,6 +28,32 @@ Runs from {{ season.begin_date }} until {{ season.end_date }}.
 </table>
 
 
+<hr>
+<table border="1" cellspacing="1" cellpadding="2">
+	<tr>
+		<th>player</th><th>SoS</th>
+	</tr>	
+	{% for p,s in sos %}
+		<tr>
+  			<td>{{ p }}</td> <td>{{ s }}</td>
+  		</tr>
+	{% endfor %}
+</table>
+
+
+<hr>
+<table border="1" cellspacing="1" cellpadding="2">
+	<tr>
+		<th>player</th><th>combined</th>
+	</tr>	
+	{% for p,s in ssos %}
+		<tr>
+  			<td>{{ p }}</td> <td>{{ s }}</td>
+  		</tr>
+	{% endfor %}
+</table>
+
+
 
 <hr>
 {% if games %}

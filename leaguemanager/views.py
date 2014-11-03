@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django import template
 
 from datetime import datetime
+from itertools import combinations, permutations
 
 from leaguemanager.models import Player, League, Season, Membership, FoodBonus, Game
 from leaguemanager.ID_lists import *
@@ -466,14 +467,20 @@ def seasontest(request, season_id):
     foodbonuses = season.foodbonus_set.all()
     num_of_fbs = len(foodbonuses)
 
+    pairs = list(permutations(parts, 2))
+
     scores = {}
     attendence_dates = {}
-
-    gametest = {}
+    match_multiplicities = {}
+    sos = {}
 
     for player in parts:
         scores[player] = 0
         attendence_dates[player] = set([])
+        sos[player] = 0
+
+    for pair in pairs:
+        match_multiplicities[pair] = 0
 
     for game in games:
         c = game.corp_player
@@ -485,17 +492,34 @@ def seasontest(request, season_id):
         attendence_dates[r].add(d)
         if game.winning_player:
             scores[game.winning_player] += 1
+        match_multiplicities[(c, r)] += 1
+        match_multiplicities[(r, c)] += 1
         
 
     for fb in foodbonuses:
         attendence_dates[fb.player].add(fb.date)
 
+    raw_games = {}    
+
     for player in parts:
+        raw_games[player] = scores[player]
         scores[player] += 5*len(attendence_dates[player])
         scores[player] += 5*len(player.foodbonus_set.filter(season=season))
 
-    scores = sorted(scores.items(), key=lambda t: t[1], reverse=True)
+    for player in parts:
+        for otherplayer in parts:
+            if not player == otherplayer:
+                sos[player] += match_multiplicities[(player, otherplayer)]*raw_games[otherplayer]
 
+    ssos = {}
+    for player in parts:
+        ssos[player] = scores[player] + 0.000001*sos[player]
+
+    scores = sorted(scores.items(), key=lambda t: t[1], reverse=True)
+    sos = sorted(sos.items(), key=lambda t: t[1], reverse=True)
+    ssos = sorted(ssos.items(), key=lambda t: t[1], reverse=True)
+
+    
     context = {
         'season': season,
         'league': league,
@@ -505,5 +529,7 @@ def seasontest(request, season_id):
         'num_of_games': num_of_games,
         'foodbonuses': foodbonuses,
         'num_of_fbs': num_of_fbs,
+        'sos': sos,
+        'ssos': ssos
     }
     return render(request, 'leaguemanager/seasontest.html', context)
