@@ -468,11 +468,22 @@ def seasontest(request, season_id):
     num_of_fbs = len(foodbonuses)
 
     pairs = list(permutations(parts, 2))
+    corp_IDs = corp_ID_list()
+    corp_IDs.pop(-1)
+    runner_IDs = runner_ID_list()
+    runner_IDs.pop(-1) 
 
     scores = {}
     attendence_dates = {}
     match_multiplicities = {}
     sos = {}
+    corp_ID_tally = {}
+    runner_ID_tally = {}
+
+    for ID in corp_IDs:
+        corp_ID_tally[ID] = 0
+    for ID in runner_IDs:
+        runner_ID_tally[ID] = 0
 
     for player in parts:
         scores[player] = 0
@@ -494,6 +505,8 @@ def seasontest(request, season_id):
             scores[game.winning_player] += 1
         match_multiplicities[(c, r)] += 1
         match_multiplicities[(r, c)] += 1
+        corp_ID_tally[game.corp_ID] += 1
+        runner_ID_tally[game.runner_ID] += 1
         
 
     for fb in foodbonuses:
@@ -530,6 +543,8 @@ def seasontest(request, season_id):
         'foodbonuses': foodbonuses,
         'num_of_fbs': num_of_fbs,
         'sos': sos,
-        'ssos': ssos
+        'ssos': ssos,
+        'corp_ID_tally': corp_ID_tally,
+        'runner_ID_tally': runner_ID_tally,
     }
     return render(request, 'leaguemanager/seasontest.html', context)
