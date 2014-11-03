@@ -469,9 +469,7 @@ def seasontest(request, season_id):
 
     pairs = list(permutations(parts, 2))
     corp_IDs = corp_ID_list()
-    corp_IDs.pop(-1)
     runner_IDs = runner_ID_list()
-    runner_IDs.pop(-1) 
 
     scores = {}
     attendence_dates = {}
@@ -479,6 +477,8 @@ def seasontest(request, season_id):
     sos = {}
     corp_ID_tally = {}
     runner_ID_tally = {}
+    win_tally = {}
+    games_played_tally = {}
 
     for ID in corp_IDs:
         corp_ID_tally[ID] = 0
@@ -489,6 +489,8 @@ def seasontest(request, season_id):
         scores[player] = 0
         attendence_dates[player] = set([])
         sos[player] = 0
+        win_tally[player] = 0
+        games_played_tally[player] = 0
 
     for pair in pairs:
         match_multiplicities[pair] = 0
@@ -499,10 +501,13 @@ def seasontest(request, season_id):
         d = game.date
         scores[c] += 1
         scores[r] += 1
+        games_played_tally[c] += 1
+        games_played_tally[r] += 1
         attendence_dates[c].add(d)
         attendence_dates[r].add(d)
         if game.winning_player:
             scores[game.winning_player] += 1
+            win_tally[game.winning_player] += 1
         match_multiplicities[(c, r)] += 1
         match_multiplicities[(r, c)] += 1
         corp_ID_tally[game.corp_ID] += 1
@@ -528,9 +533,11 @@ def seasontest(request, season_id):
     for player in parts:
         ssos[player] = scores[player] + 0.000001*sos[player]
 
-    scores = sorted(scores.items(), key=lambda t: t[1], reverse=True)
-    sos = sorted(sos.items(), key=lambda t: t[1], reverse=True)
-    ssos = sorted(ssos.items(), key=lambda t: t[1], reverse=True)
+
+    scores = sorted([(x, y, sos[x], y+0.000001*sos[x], 100.00*win_tally[x]/games_played_tally[x]) for x,y in scores.items()], key=lambda t: t[3], reverse=True)
+    corp_ID_tally = sorted([(x, y, 100.00*y/num_of_games) for x,y in corp_ID_tally.items()], key=lambda t: t[1], reverse=True)
+    runner_ID_tally = sorted([(x, y, 100.00*y/num_of_games) for x,y in runner_ID_tally.items()], key=lambda t: t[1], reverse=True)
+
 
     
     context = {
@@ -542,8 +549,6 @@ def seasontest(request, season_id):
         'num_of_games': num_of_games,
         'foodbonuses': foodbonuses,
         'num_of_fbs': num_of_fbs,
-        'sos': sos,
-        'ssos': ssos,
         'corp_ID_tally': corp_ID_tally,
         'runner_ID_tally': runner_ID_tally,
     }

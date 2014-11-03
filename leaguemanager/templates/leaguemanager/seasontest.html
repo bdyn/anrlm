@@ -16,19 +16,30 @@
 Runs from {{ season.begin_date }} until {{ season.end_date }}.
 
 <hr>
-{{ corp_ID_tally }}
-<hr>
-{{ runner_ID_tally }}
+<table border="1" cellspacing="1" cellpadding="2">
+	<tr>
+		<th>corp ID</th><th>number of games</th><th>percentage</th>
+	</tr>
+	{% for x,y,z in corp_ID_tally %}
+		{% if not y == 0 %}
+			<tr>
+				<td>{{ x }}</td><td>{{ y }}</td><td>{{ z }}</td>
+			</tr>
+		{% endif %}
+	{% endfor %}
+</table>
 
 <hr>
 <table border="1" cellspacing="1" cellpadding="2">
 	<tr>
-		<th>player</th><th>score</th>
-	</tr>	
-	{% for p,s in scores %}
-		<tr>
-  			<td>{{ p }}</td> <td>{{ s }}</td>
-  		</tr>
+		<th>runner ID</th><th>number of games</th><th>percentage</th>
+	</tr>
+	{% for x,y,z in runner_ID_tally %}
+		{% if not y == 0%}
+			<tr>
+				<td>{{ x }}</td><td>{{ y }}</td><td>{{ z }}</td>
+			</tr>
+		{% endif %}
 	{% endfor %}
 </table>
 
@@ -36,28 +47,53 @@ Runs from {{ season.begin_date }} until {{ season.end_date }}.
 <hr>
 <table border="1" cellspacing="1" cellpadding="2">
 	<tr>
-		<th>player</th><th>SoS</th>
+		<th>player</th><th>score</th><th>SoS</th><th>combined</th><th>win percentage</th>
 	</tr>	
-	{% for p,s in sos %}
+	{% for x,y,z,w,u in scores %}
 		<tr>
-  			<td>{{ p }}</td> <td>{{ s }}</td>
+  			<td>{{ x }}</td><td>{{ y }}</td><td>{{ z }}</td><td>{{ w }}</td><td>{{ u }}</td>
   		</tr>
 	{% endfor %}
 </table>
 
 
 <hr>
-<table border="1" cellspacing="1" cellpadding="2">
-	<tr>
-		<th>player</th><th>combined</th>
-	</tr>	
-	{% for p,s in ssos %}
+{% if foodbonuses %}
+	<table border="1" cellspacing="1" cellpadding="2">
 		<tr>
-  			<td>{{ p }}</td> <td>{{ s }}</td>
-  		</tr>
-	{% endfor %}
-</table>
-
+			<th colspan="3">
+				Number of food bonuses: {{ num_of_fbs }}
+			</th>
+		</tr>
+		<tr>
+			<th>
+				id
+			</th>
+			<th>
+				date
+			</th>
+			<th>
+				player
+			</th>
+		</tr>
+		
+		{% for fb in foodbonuses %}
+			<tr>
+				<td>
+					{{ fb.id }}
+				</td>
+				<td>
+					{{ fb.date }}
+				</td>
+				<td>
+					{{ fb.player }}
+				</td>
+			</tr>
+		{% endfor%}
+	</table>
+{% else %}
+	There are no food bonuses.
+{% endif %}
 
 
 <hr>
@@ -99,44 +135,7 @@ Runs from {{ season.begin_date }} until {{ season.end_date }}.
 
 
 <hr>
-{% if foodbonuses %}
-	<table border="1" cellspacing="1" cellpadding="2">
-		<tr>
-			<th colspan="3">
-				Number of food bonuses: {{ num_of_fbs }}
-			</th>
-		</tr>
-		<tr>
-			<th>
-				id
-			</th>
-			<th>
-				date
-			</th>
-			<th>
-				player
-			</th>
-		</tr>
-		
-		{% for fb in foodbonuses %}
-			<tr>
-				<td>
-					{{ fb.id }}
-				</td>
-				<td>
-					{{ fb.date }}
-				</td>
-				<td>
-					{{ fb.player }}
-				</td>
-			</tr>
-		{% endfor%}
-	</table>
-{% else %}
-	There are no food bonuses.
-{% endif %}
 
-<hr>
 
 
 
