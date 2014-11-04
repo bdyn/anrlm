@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+
+
+{% block title %}
+	anrlm: {{ season.name }}: add a food bonus
+{% endblock %}
+
+
+
+{% block content %}
+
+<h1>{{ season.name }}: add a food bonus </h1> 
+<a href="{% url 'index' %}">anrlm</a>  >
+<a href="{% url 'league' league.id %}">{{ league.name }}</a>  >
+<a href="{% url 'season' season.id %}">{{ season.name }}</a>  > 
+add a food bonus
+
+{% if comment %}
+	<hr>
+	{{ comment }}
+{% endif %}
+
+<hr>
+<form method="post" action="{% url 'add_food' season.id %}">
+	{% csrf_token %}
+	Player:
+	<select name='player'>
+		{% for member in members %}
+			<option value='{{member.id}}'> {{ member }} </option>
+		{% endfor %}
+	</select>
+	<br>
+	Date:
+	<input type="date" name="date" />
+	<br>
+	<br>
+	<input type="submit" value="add bonus" />
+</form>
+
+<hr>
+
+{% endblock %}

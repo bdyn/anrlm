@@ -8,23 +8,10 @@
 
 
 
-{% block head %}
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
-	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-	<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-	<script>
-		$(function() {
-    	$( "#datepicker" ).datepicker();
-		});
-	</script>
-{% endblock %}
-
-
-
 
 {% block content %}
 
-<h1>{{ league.name }}: add a season </h1> 
+<h1>{{ league.name }}: add a new season </h1> 
 <a href="{% url 'index' %}">anrlm</a>  >
 <a href="{% url 'league' league.id %}">{{ league.name }}</a>  >
 add a new season

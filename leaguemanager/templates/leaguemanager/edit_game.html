@@ -8,16 +8,7 @@
 
 
 
-{% block head %}
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
-	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-	<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-	<script>
-		$(function() {
-    	$( "#datepicker" ).datepicker();
-		});
-	</script>
-{% endblock %}
+
 
 
 
@@ -49,7 +40,7 @@ Outcome: {{ game.outcome }}
 <hr>
 <form method="post" action="{% url 'edit_game' game.id %}">
 	{% csrf_token %}
-	Date: <input name="gamedate" type="date" id="datepicker" value="{{ formatteddate }}" /> (mm/dd/yyyy)
+	Date: <input name="gamedate" type="date" value="{{ formatteddate }}" /> (mm/dd/yyyy)
 	<br><br>
 
 	Corp player:

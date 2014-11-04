@@ -40,7 +40,13 @@ def add_player(request):
             last = request.POST['last']
             email = request.POST['email']
             favorite = request.POST['favorite']
-            p = Player(name=name, first_name=first, last_name=last, email_address=email, favorite_faction=favorite)
+            p = Player(
+                name=name,
+                first_name=first,
+                last_name=last,
+                email_address=email,
+                favorite_faction=favorite
+            )
             p.save()
             other = "POST: Player %s was saved." % name
 
@@ -163,7 +169,7 @@ def add_scoresheet(request, season_id):
         comment = ['POST', request.POST]
         try:
             date = request.POST['gamedate']
-            date = datetime.strptime(date, '%m/%d/%Y').date()
+            date = datetime.strptime(date, '%Y-%m-%d').date()
         except ValueError:
             comment.append('invalid date')
             date = None
@@ -411,7 +417,7 @@ def edit_game(request, game_id):
         if request.POST['action'] == 'update':
             try:
                 newdate = request.POST['gamedate']
-                newdate = datetime.strptime(newdate, '%m/%d/%Y').date()
+                newdate = datetime.strptime(newdate, '%Y-%m-%d').date()
             except ValueError:
                 newdate = None
         
@@ -436,7 +442,7 @@ def edit_game(request, game_id):
             return render(request, 'leaguemanager/game_deleted.html', context)
 
 
-    formatteddate = game.date.strftime('%m/%d/%Y')
+    formatteddate = game.date.strftime('%Y-%m-%d')
     context = {
         'game': game,
         'season': season,
@@ -465,13 +471,13 @@ def add_season(request, league_id):
         enddate = request.POST['enddate']
 
         try:
-            begindate = datetime.strptime(begindate, '%m/%d/%Y').date()
+            begindate = datetime.strptime(begindate, '%Y-%m-%d').date()
         except ValueError:
             comment = 'invalid begin date'
             begindate = None
         
         try:
-            enddate = datetime.strptime(enddate, '%m/%d/%Y').date()
+            enddate = datetime.strptime(enddate, '%Y-%m-%d').date()
         except ValueError:
             comment = 'invalid end date'
             enddate = None
@@ -500,6 +506,45 @@ def add_season(request, league_id):
         'comment': comment,
     }
     return render(request, 'leaguemanager/add_season.html', context)
+
+
+
+
+def add_food(request, season_id):
+    season = Season.objects.get(id=season_id)
+    league = season.league
+    comment = 'GET'
+    members = league.members.all()
+
+    if request.method == 'POST':
+        comment = request.POST
+        date = request.POST['date']
+        try:
+            date = datetime.strptime(date, '%Y-%m-%d').date()
+        except ValueError:
+            comment = 'invalid date'
+            date = None
+
+        if date:
+            player = Player.objects.get(id=request.POST['player'])
+            fb = FoodBonus(
+                player=player,
+                date=date,
+                season=season
+                )
+            fb.save()
+            comment = 'Food bonus saved for %s on %s.' % (player, date)  
+
+
+
+    context = {
+        'season': season,
+        'league': league,
+        'comment': comment,
+        'members': members
+    }
+    return render(request, 'leaguemanager/add_food.html', context)
+
 
 
 
@@ -584,10 +629,25 @@ def seasontest(request, season_id):
         ssos[player] = scores[player] + 0.000001*sos[player]
 
 
-    scores = sorted([(x, y, sos[x], y+0.000001*sos[x], 100.00*win_tally[x]/games_played_tally[x]) for x,y in scores.items()], key=lambda t: t[3], reverse=True)
-    corp_ID_tally = sorted([(x, y, 100.00*y/num_of_games) for x,y in corp_ID_tally.items()], key=lambda t: t[1], reverse=True)
-    runner_ID_tally = sorted([(x, y, 100.00*y/num_of_games) for x,y in runner_ID_tally.items()], key=lambda t: t[1], reverse=True)
-
+    scores = sorted(
+        [(x, y, sos[x], y+0.000001*sos[x], round(100.00*win_tally[x]/games_played_tally[x], 3) if games_played_tally[x] > 0 else 0.0) for x,y in scores.items()], 
+        key=lambda t: t[3], 
+        reverse=True
+    )
+    if num_of_games > 0:
+        corp_ID_tally = sorted(
+            [(x, y, 100.00*y/num_of_games) for x,y in corp_ID_tally.items()], 
+            key=lambda t: t[1], 
+            reverse=True
+        )
+        runner_ID_tally = sorted(
+            [(x, y, 100.00*y/num_of_games) for x,y in runner_ID_tally.items()], 
+            key=lambda t: t[1], 
+            reverse=True
+        )
+    else:
+        corp_ID_tally = None
+        runner_ID_tally = None
 
     
     context = {

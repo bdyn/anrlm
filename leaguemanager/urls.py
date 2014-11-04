@@ -16,5 +16,6 @@ urlpatterns = patterns('',
     url(r'^add_scoresheet/(?P<season_id>\d+)/$', views.add_scoresheet, name='add_scoresheet'),
     url(r'^edit_game/(?P<game_id>\d+)/$', views.edit_game, name='edit_game'),
     url(r'^add_season/(?P<league_id>\d+)/$', views.add_season, name='add_season'),
+    url(r'^add_food/(?P<season_id>\d+)/$', views.add_food, name='add_food'),
     url(r'^seasontest/(?P<season_id>\d+)/$', views.seasontest, name='seasontest'),
 )

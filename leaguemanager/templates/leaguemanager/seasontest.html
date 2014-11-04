@@ -16,6 +16,12 @@
 Runs from {{ season.begin_date }} until {{ season.end_date }}.
 
 <hr>
+<a href="{% url 'add_scoresheet' season.id %}">add a score sheet</a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="{% url 'add_food' season.id %}"> add a food bonus </a>
+
+{% if corp_ID_tally %}
+<hr>
 <table border="1" cellspacing="1" cellpadding="2">
 	<tr>
 		<th>corp ID</th><th>number of games</th><th>percentage</th>
@@ -28,7 +34,9 @@ Runs from {{ season.begin_date }} until {{ season.end_date }}.
 		{% endif %}
 	{% endfor %}
 </table>
+{% endif %}
 
+{% if runner_ID_tally %}
 <hr>
 <table border="1" cellspacing="1" cellpadding="2">
 	<tr>
@@ -42,8 +50,10 @@ Runs from {{ season.begin_date }} until {{ season.end_date }}.
 		{% endif %}
 	{% endfor %}
 </table>
+{% endif %}
 
 
+{% if num_of_games > 0 %}
 <hr>
 <table border="1" cellspacing="1" cellpadding="2">
 	<tr>
@@ -55,6 +65,7 @@ Runs from {{ season.begin_date }} until {{ season.end_date }}.
   		</tr>
 	{% endfor %}
 </table>
+{% endif %}
 
 
 <hr>
@@ -97,7 +108,7 @@ Runs from {{ season.begin_date }} until {{ season.end_date }}.
 
 
 <hr>
-{% if games %}
+{% if num_of_games > 0 %}
 	<table border="1" cellspacing="1" cellpadding="2">
 		<tr>
 			<th colspan="7">

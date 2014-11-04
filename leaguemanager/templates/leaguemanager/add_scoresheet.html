@@ -8,19 +8,6 @@
 
 
 
-{% block head %}
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
-	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-	<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-	<script>
-		$(function() {
-    	$( "#datepicker" ).datepicker();
-		});
-	</script>
-{% endblock %}
-
-
-
 
 {% block content %}
 
@@ -41,7 +28,7 @@ add a score sheet
 	<table border="1" cellpadding="15">
 		<tr>
 			<td colspan="2">
-				Date: <input name="gamedate" type="date" id="datepicker" /> (mm/dd/yyyy)
+				Date: <input name="gamedate" type="date" /> (mm/dd/yyyy)
 			</td>
 		</tr>
 		<tr style="background-color:#E0E0E0">
