@@ -488,7 +488,9 @@ def add_season(request, league_id):
                     league=league
                 )
                 s.save()
-                comment = 'New season saved!'   
+                comment = 'New season saved!'
+        else:
+            comment = 'Error with your chosen dates.'   
 
     seasons = league.season_set.all()     
 
