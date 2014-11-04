@@ -453,6 +453,54 @@ def edit_game(request, game_id):
 
 
 
+
+def add_season(request, league_id):
+    league = League.objects.get(pk=league_id)
+    comment = 'GET'
+
+    if request.method == 'POST':
+        comment = request.POST
+        seasonname = request.POST['seasonname']
+        begindate = request.POST['begindate']
+        enddate = request.POST['enddate']
+
+        try:
+            begindate = datetime.strptime(begindate, '%m/%d/%Y').date()
+        except ValueError:
+            comment = 'invalid begin date'
+            begindate = None
+        
+        try:
+            enddate = datetime.strptime(enddate, '%m/%d/%Y').date()
+        except ValueError:
+            comment = 'invalid end date'
+            enddate = None
+
+        if begindate and enddate and (begindate < enddate):
+            try:
+                s = Season.objects.get(name=seasonname)
+                comment = 'There is already a season with that name.'
+            except Season.DoesNotExist:
+                s = Season(
+                    name=seasonname,
+                    begin_date=begindate,
+                    end_date=enddate,
+                    league=league
+                )
+                s.save()
+                comment = 'New season saved!'   
+
+    seasons = league.season_set.all()     
+
+    context = {
+        'league': league,
+        'seasons': seasons,
+        'comment': comment,
+    }
+    return render(request, 'leaguemanager/add_season.html', context)
+
+
+
 ## testing something!
 ## at this point seasontest is better than season
 

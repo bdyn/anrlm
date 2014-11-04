@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+	anrlm: {{ league.name }}: add a new season
+{% endblock %}
+
+
+
+
+{% block head %}
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+	<script>
+		$(function() {
+    	$( "#datepicker" ).datepicker();
+		});
+	</script>
+{% endblock %}
+
+
+
+
+{% block content %}
+
+<h1>{{ league.name }}: add a season </h1> 
+<a href="{% url 'index' %}">anrlm</a>  >
+<a href="{% url 'league' league.id %}">{{ league.name }}</a>  >
+add a new season
+
+{% if comment %}
+	<hr>
+	{{ comment }}
+{% endif %}
+
+
+
+<hr>
+{% if seasons %}
+	<b>Recent Seasons:</b>
+	<br>
+	{% for season in seasons %}
+		&nbsp;&nbsp;
+		<a href="{% url 'season' season.id %}"> {{ season }} </a>  
+		&nbsp;&nbsp;&nbsp; >>> &nbsp;&nbsp;&nbsp; 
+		{{ season.begin_date }} until {{ season.end_date }}
+		<br>
+	{% endfor %}
+{% else %}
+	<p>There are no seasons!</p>
+{% endif %}
+
+<hr>
+<form method="post" action="{% url 'add_season' league.id %}">
+	{% csrf_token %}
+	Season name: <input name="seasonname" type="text" size="30" maxlength="128" />
+	<br>
+	Begin date: <input name="begindate" type="date"  /> (mm/dd/yyyy)
+	<br>
+	End date: <input name="enddate" type="date"  /> (mm/dd/yyyy)
+	<br>
+	<br>
+	<input type="submit" value="Create new season" />
+</form>
+
+<hr>
+
+
+			
+
+{% endblock %}

@@ -21,13 +21,13 @@
 		<a href="{% url 'season' season.id %}"> {{ season }} </a>  
 		&nbsp;&nbsp;&nbsp; >>> &nbsp;&nbsp;&nbsp; 
 		{{ season.begin_date }} until {{ season.end_date }}
+		<br>
 	{% endfor %}
 {% else %}
-	<p>There are no members!</p>
+	<p>There are no seasons!</p>
 {% endif %}
 <br>
-<br>
-add new season
+<a href="{% url 'add_season' league.id %}">add a new season</a>
 
 <hr>
 League organizer: {{ league.organizer }}
