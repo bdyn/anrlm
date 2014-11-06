@@ -129,27 +129,7 @@ def add_member(request, league_id):
 
 
 
-def season(request, season_id):
-    season = Season.objects.get(id=season_id)
-    league = season.league
-    players = season.participants
-    ps = {p.name: p.score(season) for p in players}
-    ps = sorted(ps.items(), key=lambda t: t[1], reverse=True)
-    games = season.game_set.all()
-    num_of_games = len(games)
-    foodbonuses = season.foodbonus_set.all()
-    num_of_fbs = len(foodbonuses)
 
-    context = {
-        'season': season, 
-        'league': league,
-        'players_and_scores': ps,
-        'games': games,
-        'num_of_games': num_of_games,
-        'foodbonuses': foodbonuses,
-        'num_of_fbs': num_of_fbs,
-    }
-    return render(request, 'leaguemanager/season.html', context)
 
 
 
@@ -553,7 +533,7 @@ def add_food(request, season_id):
 
 
 
-def seasontest(request, season_id):
+def season(request, season_id):
     season = Season.objects.get(id=season_id)
     league = season.league
     games = season.game_set.all()
@@ -892,4 +872,4 @@ def seasontest(request, season_id):
         'score_stats': score_stats,
 
     }
-    return render(request, 'leaguemanager/seasontest.html', context)
+    return render(request, 'leaguemanager/season.html', context)
