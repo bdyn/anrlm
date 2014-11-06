@@ -566,100 +566,330 @@ def seasontest(request, season_id):
     corp_IDs = corp_ID_list()
     runner_IDs = runner_ID_list()
 
-    scores = {}
-    attendence_dates = {}
-    match_multiplicities = {}
-    sos = {}
-    corp_ID_tally = {}
-    runner_ID_tally = {}
-    win_tally = {}
-    games_played_tally = {}
+    # define tallies
+    dates = set([])
 
+    total_corp_agenda_wins = 0
+    total_runner_agenda_wins = 0
+    total_draws = 0
+    total_mills = 0
+    total_flatlines = 0
+
+    corp_ID_game_tally = {}
+    corp_ID_AGwin_tally = {}
+    corp_ID_flatline_tally = {}
+    corp_ID_AGloss_tally = {}
+    corp_ID_mill_tally = {}
+    corp_ID_draw_tally = {}
+
+    runner_ID_game_tally = {}
+    runner_ID_AGwin_tally = {}
+    runner_ID_mill_tally = {}
+    runner_ID_AGloss_tally = {}
+    runner_ID_flatline_tally = {}
+    runner_ID_draw_tally = {}
+
+    player_corp_game_tally = {}
+    player_corp_agenda_win_tally = {}
+    player_corp_agenda_loss_tally = {}
+    player_corp_flatline_tally = {}
+    player_corp_mill_tally = {}
+    player_corp_draw_tally = {}
+    player_runner_game_tally = {}
+    player_runner_agenda_win_tally = {}
+    player_runner_agenda_loss_tally = {}
+    player_runner_flatline_tally = {}
+    player_runner_mill_tally = {}
+    player_runner_draw_tally = {}
+
+    player_game_tally = {}
+    player_win_tally = {}
+    player_loss_tally = {}
+    player_draw_tally = {}
+
+    player_food_dates = {}
+    player_food_dates_tally = {}
+    player_dates = {}
+    player_dates_tally = {}
+    player_win_dates = {}
+
+    pair_multiplicities = {}
+
+    player_score = {}
+    player_game_score = {}
+    player_sos = {}
+
+
+
+    # set tallies to zero or empty set
     for ID in corp_IDs:
-        corp_ID_tally[ID] = 0
+        corp_ID_game_tally[ID] = 0
+        corp_ID_AGwin_tally[ID] = 0
+        corp_ID_flatline_tally[ID] = 0
+        corp_ID_AGloss_tally[ID] = 0
+        corp_ID_mill_tally[ID] = 0
+        corp_ID_draw_tally[ID] = 0
+
     for ID in runner_IDs:
-        runner_ID_tally[ID] = 0
+        runner_ID_game_tally[ID] = 0
+        runner_ID_AGwin_tally[ID] = 0
+        runner_ID_mill_tally[ID] = 0
+        runner_ID_AGloss_tally[ID] = 0
+        runner_ID_flatline_tally[ID] = 0
+        runner_ID_draw_tally[ID] = 0
 
     for player in parts:
-        scores[player] = 0
-        attendence_dates[player] = set([])
-        sos[player] = 0
-        win_tally[player] = 0
-        games_played_tally[player] = 0
+        player_corp_game_tally[player] = 0
+        player_corp_agenda_win_tally[player] = 0
+        player_corp_agenda_loss_tally[player] = 0
+        player_corp_flatline_tally[player] = 0
+        player_corp_mill_tally[player] = 0
+        player_corp_draw_tally[player] = 0
+        
+        player_runner_game_tally[player] = 0
+        player_runner_agenda_win_tally[player] = 0
+        player_runner_agenda_loss_tally[player] = 0
+        player_runner_flatline_tally[player] = 0
+        player_runner_mill_tally[player] = 0
+        player_runner_draw_tally[player] = 0
+        
+        player_game_tally[player] = 0
+        player_win_tally[player] = 0
+        player_loss_tally[player] = 0
+        player_draw_tally[player] = 0
+
+        player_dates[player] = set([]) # disregard multiplicities
+        player_food_dates[player] = set([]) # disregard multiplicies
+        player_dates_tally[player] = 0
+        player_food_dates_tally[player] = 0
+        player_win_dates[player] = [] # need to track multiplicities
+
+        player_score[player] = 0
+        player_game_score[player] = 0
+        player_sos[player] = 0
 
     for pair in pairs:
-        match_multiplicities[pair] = 0
+        pair_multiplicities[pair] = 0
 
+
+    # count tallies
     for game in games:
-        c = game.corp_player
-        r = game.runner_player
-        d = game.date
-        scores[c] += 1
-        scores[r] += 1
-        games_played_tally[c] += 1
-        games_played_tally[r] += 1
-        attendence_dates[c].add(d)
-        attendence_dates[r].add(d)
+        corp = game.corp_player
+        runner = game.runner_player
+        corp_ID = game.corp_ID
+        runner_ID = game.runner_ID
+        outcome = game.outcome
+        date = game.date
+
+        dates.add(date)
+        player_dates[corp].add(date)
+        player_dates[runner].add(date)
+
         if game.winning_player:
-            scores[game.winning_player] += 1
-            win_tally[game.winning_player] += 1
-        match_multiplicities[(c, r)] += 1
-        match_multiplicities[(r, c)] += 1
-        corp_ID_tally[game.corp_ID] += 1
-        runner_ID_tally[game.runner_ID] += 1
+            player_win_dates[game.winning_player].append(date)
+
+        player_corp_game_tally[corp] += 1
+        player_game_tally[corp] += 1
+        player_runner_game_tally[runner] += 1
+        player_game_tally[runner] += 1
+
+        corp_ID_game_tally[corp_ID] += 1
+        runner_ID_game_tally[runner_ID] += 1
         
+        if outcome == 'draw':
+            corp_ID_draw_tally[corp_ID] += 1
+            runner_ID_draw_tally[runner_ID] += 1
+            total_draws += 1
+            player_corp_draw_tally[corp] += 1
+            player_runner_draw_tally[runner] += 1
+            player_draw_tally[corp] += 1
+            player_draw_tally[runner] += 1
+        elif outcome == 'corp agenda victory':
+            corp_ID_AGwin_tally[corp_ID] += 1
+            runner_ID_AGloss_tally[runner_ID] +=1
+            total_corp_agenda_wins += 1
+            player_corp_agenda_win_tally[corp] += 1
+            player_runner_agenda_loss_tally[runner] += 1
+            player_win_tally[corp] += 1
+            player_loss_tally[runner] += 1
+        elif outcome == 'runner agenda victory':
+            corp_ID_AGloss_tally[corp_ID] += 1
+            runner_ID_AGwin_tally[runner_ID] += 1
+            total_runner_agenda_wins += 1
+            player_corp_agenda_loss_tally[corp] += 1
+            player_runner_agenda_win_tally[runner] += 1
+            player_win_tally[runner] += 1
+            player_loss_tally[corp] += 1
+        elif outcome == 'flatline':
+            corp_ID_flatline_tally[corp_ID] += 1
+            runner_ID_flatline_tally[runner_ID] += 1
+            total_flatlines += 1
+            player_corp_flatline_tally[corp] += 1
+            player_runner_flatline_tally[runner] += 1
+            player_win_tally[corp] += 1
+            player_loss_tally[runner] += 1
+        else: # outcome == 'mill'
+            corp_ID_mill_tally[corp_ID] += 1
+            runner_ID_mill_tally[runner_ID] += 1
+            total_mills += 1
+            player_corp_mill_tally[corp] += 1
+            player_runner_mill_tally[runner] += 1
+            player_win_tally[runner] += 1
+            player_loss_tally[corp] += 1
+        
+        pair_multiplicities[(corp, runner)] += 1
+        pair_multiplicities[(runner, corp)] += 1
+
 
     for fb in foodbonuses:
-        attendence_dates[fb.player].add(fb.date)
-
-    raw_games = {}    
-
-    for player in parts:
-        raw_games[player] = scores[player]
-        scores[player] += 5*len(attendence_dates[player])
-        scores[player] += 5*len(player.foodbonus_set.filter(season=season))
+        date = fb.date
+        player = fb.player
+        player_dates[player].add(date)
+        player_food_dates[player].add(date)
+        dates.add(date)
 
     for player in parts:
-        for otherplayer in parts:
-            if not player == otherplayer:
-                sos[player] += match_multiplicities[(player, otherplayer)]*raw_games[otherplayer]
+        player_dates_tally[player] = len(player_dates[player])
+        player_food_dates_tally[player] = len(player_food_dates[player])
+        
+        player_game_score[player] += player_game_tally[player]
+        for d in set(player_win_dates[player]):
+            player_game_score[player] += min(player_win_dates[player].count(d), 5)
 
-    ssos = {}
+        player_score[player] += player_game_score[player]
+        player_score[player] += 5*player_dates_tally[player]
+        player_score[player] += 5*player_food_dates_tally[player]
+
     for player in parts:
-        ssos[player] = scores[player] + 0.000001*sos[player]
+        for other_player in parts:
+            if not player == other_player:
+                player_sos[player] += player_game_score[other_player]*pair_multiplicities[(player, other_player)]
 
 
-    scores = sorted(
-        [(x, y, sos[x], y+0.000001*sos[x], round(100.00*win_tally[x]/games_played_tally[x], 3) if games_played_tally[x] > 0 else 0.0) for x,y in scores.items()], 
-        key=lambda t: t[3], 
-        reverse=True
-    )
-    if num_of_games > 0:
-        corp_ID_tally = sorted(
-            [(x, y, 100.00*y/num_of_games) for x,y in corp_ID_tally.items()], 
-            key=lambda t: t[1], 
-            reverse=True
+    # process tallies for display
+    dates = sorted(list(dates))
+
+    corp_stats = [
+        (
+            ID,
+            corp_ID_game_tally[ID],
+            round(100.0*corp_ID_game_tally[ID]/num_of_games, 2) if num_of_games > 0 else 0.0,
+            corp_ID_AGwin_tally[ID],
+            round(100.0*corp_ID_AGwin_tally[ID]/corp_ID_game_tally[ID], 2) if corp_ID_game_tally[ID] > 0 else 0.0,
+            corp_ID_flatline_tally[ID],
+            round(100.0*corp_ID_flatline_tally[ID]/corp_ID_game_tally[ID], 2) if corp_ID_game_tally[ID] > 0 else 0.0,
+            corp_ID_AGloss_tally[ID],
+            round(100.0*corp_ID_AGloss_tally[ID]/corp_ID_game_tally[ID], 2) if corp_ID_game_tally[ID] > 0 else 0.0,
+            corp_ID_mill_tally[ID],
+            round(100.0*corp_ID_mill_tally[ID]/corp_ID_game_tally[ID], 2) if corp_ID_game_tally[ID] > 0 else 0.0,
+            corp_ID_draw_tally[ID],
+            round(100.0*corp_ID_draw_tally[ID]/corp_ID_game_tally[ID], 2) if corp_ID_game_tally[ID] > 0 else 0.0            
         )
-        runner_ID_tally = sorted(
-            [(x, y, 100.00*y/num_of_games) for x,y in runner_ID_tally.items()], 
-            key=lambda t: t[1], 
-            reverse=True
-        )
-    else:
-        corp_ID_tally = None
-        runner_ID_tally = None
+        for ID in corp_IDs 
+    ]
+    corp_stats = [x for x in corp_stats if not x[1] == 0]
+    corp_stats = sorted(corp_stats, key=lambda t: t[1], reverse=True)
 
-    
+    runner_stats = [
+        (
+            ID,
+            runner_ID_game_tally[ID],
+            round(100.0*runner_ID_game_tally[ID]/num_of_games, 2) if num_of_games > 0 else 0.0,
+            runner_ID_AGwin_tally[ID],
+            round(100.0*runner_ID_AGwin_tally[ID]/runner_ID_game_tally[ID], 2) if runner_ID_game_tally[ID] > 0 else 0.0,
+            runner_ID_mill_tally[ID],
+            round(100.0*runner_ID_mill_tally[ID]/runner_ID_game_tally[ID], 2) if runner_ID_game_tally[ID] > 0 else 0.0,
+            runner_ID_AGloss_tally[ID],
+            round(100.0*runner_ID_AGloss_tally[ID]/runner_ID_game_tally[ID], 2) if runner_ID_game_tally[ID] > 0 else 0.0,
+            runner_ID_flatline_tally[ID],
+            round(100.0*runner_ID_flatline_tally[ID]/runner_ID_game_tally[ID], 2) if runner_ID_game_tally[ID] > 0 else 0.0,
+            runner_ID_draw_tally[ID],
+            round(100.0*runner_ID_draw_tally[ID]/runner_ID_game_tally[ID], 2) if runner_ID_game_tally[ID] > 0 else 0.0            
+        )
+        for ID in runner_IDs
+    ]
+    runner_stats = [x for x in runner_stats if not x[1] == 0]
+    runner_stats = sorted(runner_stats, key=lambda t: t[1], reverse=True)
+
+    game_stats = [
+        total_corp_agenda_wins,
+        round(100.0*total_corp_agenda_wins/num_of_games, 2) if num_of_games > 0 else 0.0,
+        total_flatlines,
+        round(100.0*total_flatlines/num_of_games, 2) if num_of_games > 0 else 0.0,
+        total_runner_agenda_wins,
+        round(100.0*total_runner_agenda_wins/num_of_games, 2) if num_of_games > 0 else 0.0,
+        total_mills,
+        round(100.0*total_mills/num_of_games, 2) if num_of_games > 0 else 0.0,
+        total_draws,
+        round(100.0*total_draws/num_of_games, 2) if num_of_games > 0 else 0.0
+    ]
+
+    player_stats = [
+        (
+            player,
+            player_game_tally[player],
+            player_win_tally[player],
+            player_loss_tally[player],
+            player_draw_tally[player],
+            round(100.0*player_win_tally[player]/player_game_tally[player], 2) if player_game_tally[player] > 0 else 0.0,
+            round(100.0*player_loss_tally[player]/player_game_tally[player], 2) if player_game_tally[player] > 0 else 0.0,
+            round(100.0*player_draw_tally[player]/player_game_tally[player], 2) if player_game_tally[player] > 0 else 0.0,
+        )
+        for player in parts
+    ]
+
+    detail_player_stats = [
+        (
+            player,
+            player_corp_game_tally[player],
+            player_corp_agenda_win_tally[player],
+            player_corp_flatline_tally[player],
+            player_corp_agenda_loss_tally[player],
+            player_corp_mill_tally[player],
+            player_corp_draw_tally[player],
+            player_runner_game_tally[player],
+            player_runner_agenda_win_tally[player],
+            player_runner_mill_tally[player],
+            player_runner_agenda_loss_tally[player],
+            player_runner_flatline_tally[player],
+            player_runner_draw_tally[player],
+        )
+        for player in parts
+    ]
+
+    pair_matrix = [
+        [player1]+[(pair_multiplicities[(player1, player2)] if not player1 == player2 else ' ') for player2 in parts]
+        for player1 in parts
+    ]
+    pair_matrix = [[' ']+parts] + pair_matrix
+
+
+    score_stats = [
+        (
+            player,
+            player_score[player],
+            player_sos[player],
+        )
+        for player in parts
+    ]
+    score_stats = sorted(score_stats, key=lambda t: (t[1], t[2]), reverse=True)
+
+
     context = {
         'season': season,
         'league': league,
-        'scores': scores,
-        'attendence_dates': attendence_dates,
         'games': games,
         'num_of_games': num_of_games,
         'foodbonuses': foodbonuses,
         'num_of_fbs': num_of_fbs,
-        'corp_ID_tally': corp_ID_tally,
-        'runner_ID_tally': runner_ID_tally,
+        'dates': dates,
+        'corp_stats': corp_stats,
+        'runner_stats': runner_stats,
+        'game_stats': game_stats,
+        'player_stats': player_stats,
+        'detail_player_stats': detail_player_stats,
+        'pair_matrix': pair_matrix,
+        'score_stats': score_stats,
+
     }
     return render(request, 'leaguemanager/seasontest.html', context)

@@ -20,55 +20,242 @@ Runs from {{ season.begin_date }} until {{ season.end_date }}.
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="{% url 'add_food' season.id %}"> add a food bonus </a>
 
-{% if corp_ID_tally %}
-<hr>
-<table border="1" cellspacing="1" cellpadding="2">
-	<tr>
-		<th>corp ID</th><th>number of games</th><th>percentage</th>
-	</tr>
-	{% for x,y,z in corp_ID_tally %}
-		{% if not y == 0 %}
-			<tr>
-				<td>{{ x }}</td><td>{{ y }}</td><td>{{ z }}</td>
-			</tr>
-		{% endif %}
-	{% endfor %}
-</table>
-{% endif %}
 
-{% if runner_ID_tally %}
+
+
+{% if num_of_games > 0 %}
 <hr>
+<h1>player score stats</h1>
 <table border="1" cellspacing="1" cellpadding="2">
 	<tr>
-		<th>runner ID</th><th>number of games</th><th>percentage</th>
+		<th>player</th>
+		<th>score</th>
+		<th>SoS</th>
 	</tr>
-	{% for x,y,z in runner_ID_tally %}
-		{% if not y == 0%}
-			<tr>
-				<td>{{ x }}</td><td>{{ y }}</td><td>{{ z }}</td>
-			</tr>
-		{% endif %}
-	{% endfor %}
+	{% for stats in score_stats %}
+		<tr>
+			{% for stat in stats %}
+				<td style="text-align: right;">
+					{{ stat }}
+					<br>
+				</td>
+			{% endfor %}
+		</tr>
+	{% endfor%}
 </table>
 {% endif %}
 
 
 {% if num_of_games > 0 %}
 <hr>
+<h1>basic player stats</h1>
 <table border="1" cellspacing="1" cellpadding="2">
 	<tr>
-		<th>player</th><th>score</th><th>SoS</th><th>combined</th><th>win percentage</th>
-	</tr>	
-	{% for x,y,z,w,u in scores %}
+		<th colspan="2"></th>
+		<th colspan="3">overview</th>
+		<th colspan="3">overview %</th>
+	</tr>
+	<tr>
+		<th>player</th>
+		<th>games</th>
+		<th>wins</th>
+		<th>losses</th>
+		<th>draws</th>
+		<th>win %</th>
+		<th>loss %</th>
+		<th>draw %</th>
+	</tr>
+	{% for stats in player_stats %}
 		<tr>
-  			<td>{{ x }}</td><td>{{ y }}</td><td>{{ z }}</td><td>{{ w }}</td><td>{{ u }}</td>
-  		</tr>
+			{% for stat in stats %}
+				<td style="text-align: right;">
+					{{ stat }}
+					<br>
+				</td>
+			{% endfor %}
+		</tr>
+	{% endfor%}
+</table>
+{% endif %}
+
+
+
+{% if num_of_games > 0 %}
+<hr>
+<h1>detail player stats</h1>
+<table border="1" cellspacing="1" cellpadding="2">
+	<tr>
+		<th></th>
+		<th colspan="6">corp stats</th>
+		<th colspan="6">runner stats</th>
+	</tr>
+	<tr>
+		<th></th>
+		<th></th>
+		<th colspan="2">wins</th>
+		<th colspan="2">losses</th>
+		<th></th>
+		<th></th>
+		<th colspan="2">wins</th>
+		<th colspan="2">losses</th>
+		<th></th>
+	</tr>
+	<tr>
+		<th>player</th>
+		<th>games</th>
+		<th>agenda</th>
+		<th>flatline</th>
+		<th>agenda</th>
+		<th>mill</th>
+		<th>draw</th>
+		<th>games</th>
+		<th>agenda</th>
+		<th>mills</th>
+		<th>agenda</th>
+		<th>flatlines</th>
+		<th>draw</th>
+	</tr>
+	{% for stats in detail_player_stats %}
+		<tr>
+			{% for stat in stats %}
+				<td style="text-align: right;">
+					{{ stat }}
+					<br>
+				</td>
+			{% endfor %}
+		</tr>
+	{% endfor%}
+</table>
+{% endif %}
+
+
+
+
+<hr>
+<h1>opponent multiplicities</h1>
+<table border="1" cellspacing="1" cellpadding="2">
+{% for row in pair_matrix %}
+	<tr>
+	{% for number in row %}
+		<td style="text-align: right;">{{ number }}</td>
 	{% endfor %}
+	</tr>
+{% endfor %}
+</table>
+
+
+
+
+{% if num_of_games > 0 %}
+<hr>
+<h1>basic game stats</h1>
+Number of games: {{ num_of_games }}
+<table border="1" cellspacing="1" cellpadding="2">
+	<tr>
+		<th colspan="4">corp wins</th>
+		<th colspan="4">runners wins</th>
+		<th colspan="2"></th>
+	</tr>
+	<tr>
+		<th>agenda</th><th>%</th>
+		<th>flatlines</th><th>%</th>
+		<th>agenda</th><th>%</th>
+		<th>mills</th><th>%</th>
+		<th>draws</th><th>%</th>
+	</tr>
+	<tr>
+		{% for stat in game_stats %}
+			<td style="text-align: right;">{{ stat }}</td>
+		{% endfor %}
+	</tr>
+</table>
+
+
+{% endif %}
+
+
+
+
+
+{% if num_of_games > 0 %}
+<hr>
+<h1> corp ID stats </h1>
+<table border="1" cellspacing="1" cellpadding="2">
+	<tr>
+		<th></th>
+		<th colspan="2">games</th>
+		<th colspan="4">wins</th>
+		<th colspan="4">losses</th>
+		<th colspan="2"></th>
+	</tr>
+	<tr>
+		<th>corp ID</th>
+		<th>total</th>
+		<th>% of all</th>
+		<th>agenda</th>
+		<th>%</th>
+		<th>flatline</th>
+		<th>%</th>
+		<th>agenda</th>
+		<th>%</th>
+		<th>mill</th>
+		<th>%</th>
+		<th>draws</th>
+		<th>%</th>
+	</tr>
+	{% for stats in corp_stats %}
+		<tr>
+			{% for stat in stats %}
+				<td style="text-align: right;">
+					{{ stat }}
+					<br>
+				</td>
+			{% endfor %}
+		</tr>
+	{% endfor%}
+</table>
+
+<hr>
+<h1> runner ID stats </h1>
+<table border="1" cellspacing="1" cellpadding="2">
+	<tr>
+		<th></th>
+		<th colspan="2">games</th>
+		<th colspan="4">wins</th>
+		<th colspan="4">losses</th>
+		<th colspan="2"></th>
+	</tr>
+	<tr>
+		<th>runner ID</th>
+		<th>total</th>
+		<th>% of all</th>
+		<th>agenda</th>
+		<th>%</th>
+		<th>mills</th>
+		<th>%</th>
+		<th>agenda</th>
+		<th>%</th>
+		<th>flatline</th>
+		<th>%</th>
+		<th>draws</th>
+		<th>%</th>
+	</tr>
+	{% for stats in runner_stats %}
+		<tr>
+			{% for stat in stats %}
+				<td style="text-align: right;">
+					{{ stat }}
+					<br>
+				</td>
+			{% endfor %}
+		</tr>
+	{% endfor%}
 </table>
 {% endif %}
 
 
 <hr>
+<h1>food bonuses</h1>
 {% if foodbonuses %}
 	<table border="1" cellspacing="1" cellpadding="2">
 		<tr>
@@ -107,7 +294,9 @@ Runs from {{ season.begin_date }} until {{ season.end_date }}.
 {% endif %}
 
 
+
 <hr>
+<h1>game record</h1>
 {% if num_of_games > 0 %}
 	<table border="1" cellspacing="1" cellpadding="2">
 		<tr>
@@ -143,10 +332,6 @@ Runs from {{ season.begin_date }} until {{ season.end_date }}.
 {% else %}
 	No games have been played!
 {% endif %}
-
-
-<hr>
-
 
 
 
