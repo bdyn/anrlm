@@ -139,7 +139,7 @@ def add_scoresheet(request, season_id):
     comment = ['GET']
     season = Season.objects.get(id=season_id)
     league = season.league
-    players = league.members.all()
+    players = league.members.all().order_by('name')
     corp_IDs = corp_ID_list()
     corp_IDs.pop(-1)
     runner_IDs = runner_ID_list()
