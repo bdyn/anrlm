@@ -21,6 +21,19 @@ Runs from {{ season.begin_date }} until {{ season.end_date }}.
 <a href="{% url 'add_food' season.id %}"> add a food bonus </a>
 
 
+<!-- trash this -->
+<hr>
+<table border="1" cellspacing="1" cellpadding="2">
+{% for list in trash %}
+	<tr>
+		{% for entry in list %}
+			<td>
+				{{ entry }}
+			</td>
+		{% endfor %}
+	</tr>
+{% endfor %}
+</table>
 
 
 {% if num_of_games > 0 %}

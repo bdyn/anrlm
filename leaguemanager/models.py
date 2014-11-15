@@ -54,6 +54,13 @@ class Player(models.Model):
         total += 5*len(self.foodbonus_set.filter(season=season))
         return total
 
+    def food_on_date(self, season, date):
+        return FoodBonus.objects.filter(player=self, season=season, date=date).count()
+
+    def games_played_on_date(self, season, date):
+        return len([x for x in self.games_played(season=season) if x.date==date])
+
+
 
 
 

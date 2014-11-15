@@ -855,6 +855,10 @@ def season(request, season_id):
     score_stats = sorted(score_stats, key=lambda t: (t[1], t[2]), reverse=True)
 
 
+
+    trash = [[' ']+dates] + [[player]+[(player.games_played_on_date(season, d), player.food_on_date(season, d)) for d in dates] for player in parts]
+
+
     context = {
         'season': season,
         'league': league,
@@ -870,6 +874,6 @@ def season(request, season_id):
         'detail_player_stats': detail_player_stats,
         'pair_matrix': pair_matrix,
         'score_stats': score_stats,
-
+        'trash': trash,
     }
     return render(request, 'leaguemanager/season.html', context)
